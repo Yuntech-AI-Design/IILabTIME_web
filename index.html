@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>資訊整合實驗室 - 時間追蹤系統</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <!-- 自定義 CSS -->
+    <link href="/css/style.css" rel="stylesheet">
+</head>
+<body>
+    <div class="header text-center">
+        <h1><i class="fas fa-laptop-code"></i> 資訊整合實驗室</h1>
+        <p class="mb-0">實習時間追蹤系統</p>
+    </div>
+
+    <div class="container my-4">
+        <div class="row mb-4">
+            <div class="col-md-12">
+                <div class="alert alert-info" role="alert">
+                    <i class="fas fa-info-circle"></i> 打卡開始計時會使用系統時間，無法手動竄改。競爭排行榜每週更新！
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- 個人狀態與打卡 -->
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0"><i class="fas fa-user-clock"></i> 個人狀態</h5>
+                    </div>
+                    <div class="card-body text-center">
+                        <div class="mb-3">
+                            <select id="user-selector" class="form-select mb-3">
+                                <option selected disabled>選擇使用者</option>
+                                <option value="user1">郭秉乾</option>
+                                <option value="user2">王豆腐</option>
+                                <option value="user3">蔡鈞凱</option>
+                                <option value="user4">胡宇倫比</option>
+                                <option value="user5">李琛昱</option>
+                            </select>
+                            <h4 id="current-user">請選擇使用者</h4>
+                            <p class="mb-2">目前狀態: <span id="status-indicator"><span class="online-status offline"></span>離線</span></p>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <h5>本次時間</h5>
+                            <div class="timer" id="current-timer">00:00:00</div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <h5>本週累計</h5>
+                            <div class="timer" id="weekly-timer">00:00:00</div>
+                        </div>
+                        
+                        <button id="check-in-btn" class="btn btn-success check-in-btn mb-2" disabled>
+                            <i class="fas fa-sign-in-alt"></i> 打卡上線
+                        </button>
+                        <button id="check-out-btn" class="btn btn-danger check-in-btn" disabled>
+                            <i class="fas fa-sign-out-alt"></i> 打卡下線
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 競爭排行榜 -->
+            <div class="col-md-4 mb-4">
+                <div class="card leaderboard-card">
+                    <div class="card-header bg-warning text-dark">
+                        <h5 class="mb-0"><i class="fas fa-trophy"></i> 本週排行榜</h5>
+                    </div>
+                    <div class="card-body p-0">
+                        <ul class="list-group list-group-flush" id="leaderboard-list">
+                            <!-- 排行榜會由JS動態產生 -->
+                        </ul>
+                    </div>
+                    <div class="card-footer text-center">
+                        <small>每週一凌晨重置排行榜</small>
+                    </div>
+                </div>
+                
+                <!-- 目前在線成員 -->
+                <div class="card mt-3">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="mb-0"><i class="fas fa-users"></i> 目前在線成員</h5>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-group" id="online-users-list">
+                            <!-- 在線用戶會由JS動態產生 -->
+                            <li class="list-group-item text-center text-muted">目前無人在線</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 打卡歷史記錄 -->
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <div class="card-header bg-info text-white">
+                        <h5 class="mb-0"><i class="fas fa-history"></i> 打卡歷史記錄</h5>
+                    </div>
+                    <div class="card-body history-log" id="history-log">
+                        <!-- 歷史記錄會由JS動態產生 -->
+                        <div class="text-center text-muted">
+                            <p>選擇使用者以查看歷史記錄</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 活動圖表 -->
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header bg-dark text-white">
+                        <h5 class="mb-0"><i class="fas fa-chart-bar"></i> 本週活動圖表</h5>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="activity-chart" class="activity-chart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <!-- Chart.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <!-- 自定義 JS -->
+    <script src="/js/script.js"></script>
+</body>
+</html>

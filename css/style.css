@@ -1,0 +1,104 @@
+body {
+    background-color: #f8f9fa;
+    font-family: 'Microsoft JhengHei', sans-serif;
+}
+
+.header {
+    background-color: #343a40;
+    color: white;
+    padding: 20px 0;
+    border-bottom: 4px solid #007bff;
+}
+
+.card {
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    transition: transform 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.online-status {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 5px;
+}
+
+.online {
+    background-color: #28a745;
+}
+
+.offline {
+    background-color: #dc3545;
+}
+
+.timer {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #007bff;
+}
+
+.check-in-btn {
+    width: 100%;
+    border-radius: 20px;
+}
+
+.leaderboard-card {
+    background-color: #f1f8ff;
+}
+
+.leaderboard-item {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.leaderboard-item:last-child {
+    border-bottom: none;
+}
+
+.rank-1 {
+    background-color: #ffd700;
+    color: #000;
+}
+
+.rank-2 {
+    background-color: #c0c0c0;
+    color: #000;
+}
+
+.rank-3 {
+    background-color: #cd7f32;
+    color: #000;
+}
+
+.history-log {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.log-item {
+    border-left: 3px solid #007bff;
+    padding-left: 10px;
+    margin-bottom: 10px;
+}
+
+.log-time {
+    font-size: 0.8rem;
+    color: #6c757d;
+}
+
+.activity-chart {
+    height: 250px;
+    width: 100%;
+}
+
+@media (max-width: 768px) {
+    .timer {
+        font-size: 1.2rem;
+    }
+}
