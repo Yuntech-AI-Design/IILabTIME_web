@@ -308,6 +308,30 @@ function initActivityChart() {
     });
 }
 
+// 顯示警告提示
+function showWarning(message) {
+    // 創建警告元素
+    const warningDiv = document.createElement('div');
+    warningDiv.className = 'alert alert-warning alert-dismissible fade show';
+    warningDiv.setAttribute('role', 'alert');
+    warningDiv.innerHTML = `
+        <strong>警告!</strong> ${message}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    `;
+    
+    // 將警告插入頁面頂部
+    const container = document.querySelector('.container');
+    container.insertBefore(warningDiv, container.firstChild);
+    
+    // // 5秒後自動消失
+    // setTimeout(() => {
+    //     warningDiv.classList.remove('show');
+    //     setTimeout(() => {
+    //         warningDiv.remove();
+    //     }, 150);
+    // }, 5000);
+}
+
 // 打卡上線
 function checkIn() {
     if (!currentUser || users[currentUser].isOnline) return;
@@ -338,10 +362,26 @@ function checkOut() {
     const user = users[currentUser];
     const now = new Date();
     
-    user.isOnline = false;
-    
     // 計算本次時長（秒）
     const sessionDuration = Math.floor((now - user.currentSessionStart) / 1000);
+    
+    // 計算本週總時長（當前累計 + 本次時長）
+    const totalWeeklyTime = user.weeklyTime + sessionDuration;
+    const sixHoursInSeconds = 6 * 60 * 60; // 6小時轉換為秒
+    
+    // 檢查本週累計時間是否少於6小時
+    if (totalWeeklyTime < sixHoursInSeconds) {
+        // 顯示確認對話框
+        const confirmCheckout = confirm(`警告: 本週累計時間不足6小時（目前: ${formatTime(totalWeeklyTime)}）。確定要打卡下線嗎？`);
+        if (!confirmCheckout) {
+            return; // 用戶取消了打卡
+        }
+        
+        // 顯示警告提示
+        showWarning(`本週累計時間不足6小時（${formatTime(totalWeeklyTime)}）。本週實習時間至少應達6小時。`);
+    }
+    
+    user.isOnline = false;
     
     // 更新本週累計時間
     user.weeklyTime += sessionDuration;
