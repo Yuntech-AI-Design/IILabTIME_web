@@ -26,8 +26,13 @@ jobs:
           mvn clean package -DskipTests
           rm -f target/*.jar.original
 
+      - name: Move JAR to separate directory
+        run: |
+          mkdir -p artifact
+          mv backend/target/*.jar artifact/
+
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: IILabTimeBackend.jar
-          path: backend/target/*.jar
+          path: artifact/*
