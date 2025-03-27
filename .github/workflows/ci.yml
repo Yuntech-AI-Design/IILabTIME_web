@@ -30,7 +30,7 @@ jobs:
         run: |
           mkdir -p artifact
           mv backend/target/*.jar artifact/
-
+      #你媽的 就是硬要把jar檔案壓縮成zip檔案 SB玩意
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
