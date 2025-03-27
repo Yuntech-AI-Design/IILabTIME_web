@@ -22,7 +22,7 @@ jobs:
 
       - name: Build with Maven
         run: |
-          cd backend  # 切換到有 pom.xml 的目錄
+          cd backend 
           mvn clean package -DskipTests
 
       - name: Upload artifact
