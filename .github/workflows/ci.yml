@@ -1,0 +1,38 @@
+name: Build IILabTimeBackend Jar
+
+on:
+  push:
+    branches:
+      - main
+      - JIE
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v3
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Build with Maven
+        run: |
+          cd backend 
+          mvn clean package -DskipTests
+          rm -f target/*.jar.original
+
+      - name: Move JAR to separate directory
+        run: |
+          mkdir -p artifact
+          mv backend/target/*.jar artifact/
+      #你媽的 就是硬要把jar檔案壓縮成zip檔案 SB玩意
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: IILabTimeBackend
+          path: artifact/*
