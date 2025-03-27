@@ -21,7 +21,9 @@ jobs:
           java-version: '21'
 
       - name: Build with Maven
-        run: mvn clean package -DskipTests
+        run: |
+          cd backend  # 切換到有 pom.xml 的目錄
+          mvn clean package -DskipTests
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
