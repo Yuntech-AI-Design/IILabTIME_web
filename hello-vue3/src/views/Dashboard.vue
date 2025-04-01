@@ -1,6 +1,7 @@
 <template>
     <div class="dashboard">
-      <h1 class="mb-4">您好，{{ currentUser.name }}</h1>
+      <h1 class="mb-4">您好，{{ currentUser?.name || '訪客' }}</h1>
+
       
       <!-- 系統通知 -->
       <div class="alert alert-info d-flex align-items-center" role="alert">
@@ -230,7 +231,8 @@
     setup() {
       const store = useStore()
       
-      const currentUser = computed(() => store.getters['auth/currentUser'])
+      const currentUser = computed(() => store.getters['auth/currentUser'] || { name: '開發者測試帳號' })
+
       
       return {
         currentUser
