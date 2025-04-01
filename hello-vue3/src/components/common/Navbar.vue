@@ -122,13 +122,53 @@ export default {
 </script>
 
 <style scoped>
+/* 改成漸層背景 */
+nav.navbar {
+  background: linear-gradient(to right, #6366f1, #8b5cf6);
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+  border-bottom: none;
+  transition: background 0.3s ease;
+}
+
+/* 文字更亮，hover 更清楚 */
 .navbar-dark .navbar-nav .nav-link {
-  color: rgba(255, 255, 255, 0.85);
+  color: #fff;
+  font-weight: 500;
+  transition: color 0.2s ease;
 }
 .navbar-dark .navbar-nav .nav-link:hover {
-  color: rgba(255, 255, 255, 1);
+  color: #ffe082;
 }
+
+/* dropdown menu 現代感 */
+.dropdown-menu {
+  border-radius: 0.5rem;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  border: none;
+}
+
+/* dropdown 項目 hover */
+.dropdown-item:hover {
+  background-color: #e0e7ff;
+  color: #4f46e5;
+  font-weight: 500;
+}
+
+/* 選中的 item 更現代 */
 .dropdown-item:active {
-  background-color: #0d6efd;
+  background-color: #6366f1;
+  color: white;
 }
+
+/* logo 調整大小間距 */
+.navbar-brand img {
+  height: 36px;
+  margin-right: 0.5rem;
+  vertical-align: middle;
+}
+nav.navbar {
+  backdrop-filter: blur(8px);
+  background: linear-gradient(to right, #6366f1cc, #8b5cf6cc); /* 加透明度 */
+}
+
 </style>
