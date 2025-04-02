@@ -30,12 +30,27 @@
   
   <style scoped>
   footer {
-    color: #495057;
+  background: linear-gradient(to right, #f8f9fa, #e9ecef);
+  color: #6c757d;
+  font-size: 0.95rem;
+  border-top: 1px solid #dee2e6;
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.03);
+}
+
+footer a {
+  color: #6c757d;
+  transition: all 0.2s ease;
+}
+
+footer a:hover {
+  color: #4f46e5; /* indigo */
+  text-decoration: underline;
+}
+@media (max-width: 768px) {
+  footer .text-md-end {
+    text-align: center !important;
+    margin-top: 1rem;
   }
-  footer a {
-    color: #495057;
-  }
-  footer a:hover {
-    color: #0d6efd;
-  }
+}
+
   </style>
