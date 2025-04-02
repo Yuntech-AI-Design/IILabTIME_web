@@ -1,28 +1,14 @@
 <template>
   <div id="app" class="d-flex flex-column min-vh-100 bg-light text-dark">
-    <Navbar />
+    <AppNavbar />
     <main class="container py-4 flex-fill">
       <router-view />
     </main>
-    <Footer />
+    <AppFooter />
   </div>
 </template>
 
-<script>
-import Navbar from './components/common/Navbar.vue'
-import Footer from './components/common/Footer.vue'
-
-export default {
-  name: 'App',
-  components: {
-    Navbar,
-    Footer
-  }
-}
-</script>
-
 <style>
-@import 'bootstrap/dist/css/bootstrap.min.css';
 
 /* 全站字體設定 */
 #app {
