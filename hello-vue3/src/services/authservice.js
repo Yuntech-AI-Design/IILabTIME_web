@@ -1,5 +1,5 @@
 import api from './api'
-
+/* eslint-disable no-unused-vars */
 class AuthService {
   // Google 登入
   googleLogin(credential) {
@@ -48,3 +48,4 @@ class AuthService {
     })
   }
 }
+/* eslint-disable no-unused-vars */
