@@ -1,9 +1,8 @@
+import '@/assets/tailwind.css'
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
-import 'bootstrap/dist/css/bootstrap.min.css'
-import 'bootstrap'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { 
   faHome, faSignInAlt, faUserPlus, faGraduationCap, 
