@@ -1,29 +1,38 @@
+<!-- src/views/CheckIn.vue -->
 <template>
   <div class="container mx-auto px-4 py-8 min-h-screen bg-gray-100">
-    <h1 class="text-3xl font-bold text-gray-800 mb-6">實習打卡頁面</h1>
+    <h1 class="text-3xl font-bold text-gray-800 mb-8 flex items-center justify-center">
+      <ClockIcon class="w-8 h-8 mr-2 text-indigo-600" /> 實習打卡頁面
+    </h1>
 
     <!-- 狀態與按鈕 -->
-    <div class="bg-white shadow-md rounded-lg p-6 mb-6">
+    <div class="bg-white shadow-lg rounded-xl p-6 mb-6 border border-gray-200">
       <div class="flex flex-col md:flex-row justify-between items-center">
         <div class="text-center md:text-left mb-4 md:mb-0">
-          <h2 class="text-xl font-semibold text-gray-700">當前狀態</h2>
-          <p class="text-gray-500">您今天 {{ isCheckedIn ? '已實習上線打卡' : '尚未打卡' }}</p>
-          <p class="text-sm text-gray-400 mt-1">最後打卡：{{ lastCheckIn || '無記錄' }}</p>
+          <h2 class="text-xl font-semibold text-gray-700 flex items-center">
+            <UserCircleIcon class="w-6 h-6 mr-2 text-indigo-500" /> 當前狀態
+          </h2>
+          <p class="text-gray-600 mt-1">
+            您今天 {{ isCheckedIn ? '已實習上線打卡' : '尚未打卡' }}
+          </p>
+          <p class="text-sm text-gray-400 mt-1 flex items-center">
+            <CalendarIcon class="w-4 h-4 mr-1" /> 最後打卡：{{ lastCheckIn || '無記錄' }}
+          </p>
         </div>
         <div class="flex space-x-4">
-          <button 
-            @click="checkIn" 
-            :disabled="isCheckedIn" 
-            class="px-6 py-3 bg-indigo-600 text-white rounded-full font-semibold shadow-md hover:bg-indigo-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-all duration-300"
+          <button
+            @click="checkIn"
+            :disabled="isCheckedIn"
+            class="px-6 py-3 bg-indigo-600 text-white rounded-full font-semibold shadow-md hover:bg-indigo-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-all duration-300 flex items-center"
           >
-            實習上線打卡
+            <ArrowUpCircleIcon class="w-5 h-5 mr-2" /> 實習上線
           </button>
-          <button 
-            @click="checkOut" 
-            :disabled="!isCheckedIn" 
-            class="px-6 py-3 bg-green-600 text-white rounded-full font-semibold shadow-md hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-all duration-300"
+          <button
+            @click="checkOut"
+            :disabled="!isCheckedIn"
+            class="px-6 py-3 bg-green-600 text-white rounded-full font-semibold shadow-md hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-all duration-300 flex items-center"
           >
-            實習下線打卡
+            <ArrowDownCircleIcon class="w-5 h-5 mr-2" /> 實習下線
           </button>
         </div>
       </div>
@@ -31,27 +40,35 @@
 
     <!-- 打卡統計 -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-      <div class="bg-white shadow-md rounded-lg p-6 text-center">
-        <h3 class="text-lg font-semibold text-gray-700">本週時數</h3>
-        <p class="text-2xl font-bold text-gray-800">{{ weeklyHours }} 小時</p>
+      <div class="bg-white shadow-lg rounded-xl p-6 text-center transform hover:scale-105 transition-transform duration-200">
+        <h3 class="text-lg font-semibold text-gray-700 flex items-center justify-center">
+          <ClockIcon class="w-5 h-5 mr-2 text-indigo-500" /> 本週時數
+        </h3>
+        <p class="text-2xl font-bold text-gray-800 mt-2">{{ weeklyHours }} 小時</p>
       </div>
-      <div class="bg-white shadow-md rounded-lg p-6 text-center">
-        <h3 class="text-lg font-semibold text-gray-700">本月打卡</h3>
-        <p class="text-2xl font-bold text-gray-800">{{ monthlyCheckIns }} 次</p>
+      <div class="bg-white shadow-lg rounded-xl p-6 text-center transform hover:scale-105 transition-transform duration-200">
+        <h3 class="text-lg font-semibold text-gray-700 flex items-center justify-center">
+          <CheckCircleIcon class="w-5 h-5 mr-2 text-indigo-500" /> 本月打卡
+        </h3>
+        <p class="text-2xl font-bold text-gray-800 mt-2">{{ monthlyCheckIns }} 次</p>
       </div>
-      <div class="bg-white shadow-md rounded-lg p-6 text-center">
-        <h3 class="text-lg font-semibold text-gray-700">總時數</h3>
-        <p class="text-2xl font-bold text-gray-800">{{ totalHours }} 小時</p>
+      <div class="bg-white shadow-lg rounded-xl p-6 text-center transform hover:scale-105 transition-transform duration-200">
+        <h3 class="text-lg font-semibold text-gray-700 flex items-center justify-center">
+          <ChartBarIcon class="w-5 h-5 mr-2 text-indigo-500" /> 總時數
+        </h3>
+        <p class="text-2xl font-bold text-gray-800 mt-2">{{ totalHours }} 小時</p>
       </div>
     </div>
 
     <!-- 打卡紀錄 -->
-    <div class="bg-white shadow-md rounded-lg p-6">
-      <h2 class="text-xl font-semibold text-gray-700 mb-4">打卡歷史記錄</h2>
+    <div class="bg-white shadow-lg rounded-xl p-6 border border-gray-200">
+      <h2 class="text-xl font-semibold text-gray-700 mb-4 flex items-center">
+        <DocumentTextIcon class="w-6 h-6 mr-2 text-indigo-500" /> 打卡歷史記錄
+      </h2>
       <div class="overflow-x-auto">
         <table class="w-full text-left">
           <thead>
-            <tr class="bg-gray-200 text-gray-700">
+            <tr class="bg-gray-100 text-gray-700">
               <th class="py-3 px-4 font-semibold">日期</th>
               <th class="py-3 px-4 font-semibold">上班時間</th>
               <th class="py-3 px-4 font-semibold">下班時間</th>
@@ -76,7 +93,9 @@
     <!-- 彈窗 -->
     <div v-if="showModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50">
       <div class="bg-white rounded-lg p-6 shadow-lg max-w-sm w-full">
-        <h3 class="text-lg font-semibold text-gray-800 mb-4">{{ modalMessage }}</h3>
+        <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+          <InformationCircleIcon class="w-6 h-6 mr-2 text-indigo-500" /> {{ modalMessage }}
+        </h3>
         <div class="flex justify-end space-x-4">
           <template v-if="pendingAction">
             <button @click="cancelModal" class="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400">
@@ -99,6 +118,17 @@
 
 <script setup>
 import { ref } from 'vue'
+import {
+  ClockIcon,
+  UserCircleIcon,
+  CalendarIcon,
+  ArrowUpCircleIcon,
+  ArrowDownCircleIcon,
+  CheckCircleIcon,
+  ChartBarIcon,
+  DocumentTextIcon,
+  InformationCircleIcon
+} from '@heroicons/vue/24/outline'
 
 const isCheckedIn = ref(false)
 const lastCheckIn = ref('')
@@ -112,15 +142,11 @@ const showModal = ref(false)
 const modalMessage = ref('')
 const pendingAction = ref(null)
 
-const getCurrentTime = () => new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-const getCurrentDate = () => new Date().toLocaleDateString('zh-TW', { year: 'numeric', month: '2-digit', day: '2-digit' })
-
-// const canCheckOut = computed(() => {
-//   if (!lastCheckInTimestamp.value) return false
-//   const now = Date.now()
-//   const diffInSeconds = (now - lastCheckInTimestamp.value) / 1000
-//   return diffInSeconds >= 60
-// })
+const getCurrentTime = () => new Date().toLocaleTimeString('zh-TW', { hour: '2-digit', minute: '2-digit', hour12: false })
+const getCurrentDate = () => {
+  const date = new Date()
+  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`
+}
 
 const checkIn = () => {
   modalMessage.value = '確定要進行實習上線打卡嗎？'
@@ -152,7 +178,7 @@ const confirmAction = () => {
     const date = getCurrentDate()
     isCheckedIn.value = true
     lastCheckIn.value = `${date} ${time}`
-    lastCheckInTimestamp.value = Date.now() // ✅ 改這裡：用 timestamp 而不是 new Date()
+    lastCheckInTimestamp.value = Date.now()
     checkInRecords.value.unshift({ date, checkIn: time, checkOut: null, hours: null })
     monthlyCheckIns.value += 1
   } else if (pendingAction.value === 'checkOut') {
@@ -160,12 +186,17 @@ const confirmAction = () => {
     const todayRecord = checkInRecords.value[0]
     if (todayRecord && !todayRecord.checkOut) {
       todayRecord.checkOut = time
-      const checkInTime = new Date(`${todayRecord.date} ${todayRecord.checkIn}`)
-      const checkOutTime = new Date(`${todayRecord.date} ${time}`)
-      const hours = ((checkOutTime - checkInTime) / (1000 * 60 * 60)).toFixed(2)
-      todayRecord.hours = hours
-      weeklyHours.value += parseFloat(hours)
-      totalHours.value += parseFloat(hours)
+      const checkInTime = new Date(`${todayRecord.date}T${todayRecord.checkIn}:00`)
+      const checkOutTime = new Date(`${todayRecord.date}T${time}:00`)
+      if (isNaN(checkInTime) || isNaN(checkOutTime)) {
+        console.error('Invalid date format:', todayRecord.date, todayRecord.checkIn, time)
+        todayRecord.hours = '計算錯誤'
+      } else {
+        const hours = ((checkOutTime - checkInTime) / (1000 * 60 * 60)).toFixed(2)
+        todayRecord.hours = hours
+        weeklyHours.value = Number(weeklyHours.value) + Number(hours)
+        totalHours.value = Number(totalHours.value) + Number(hours)
+      }
     }
     isCheckedIn.value = false
     lastCheckInTimestamp.value = null

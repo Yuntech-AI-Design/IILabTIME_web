@@ -15,6 +15,7 @@ const Reports = () => import('../views/Reports.vue')
 const Forum = () => import('../views/Forum.vue')
 const QA = () => import('../views/QA.vue')
 const Profile = () => import('../views/Profile.vue')
+const IntershipForm = () => import('../views/IntershipForm.vue')
 
 const routes = [
   {
@@ -85,6 +86,12 @@ const routes = [
   {
     path: '/:pathMatch(.*)*',
     redirect: '/'
+  },
+  {
+    path: '/intershipform',
+    name: 'intershipform',
+    component: IntershipForm,
+    meta: { requiresAuth: false }
   }
 ]
 
