@@ -1,10 +1,6 @@
 <template>
   <div id="app" class="d-flex flex-column min-vh-100 bg-light text-dark">
-<<<<<<< HEAD
     <AppNavbar />
-=======
-    <Navbar />
->>>>>>> origin/main
     <main class="container py-4 flex-fill">
       <router-view />
     </main>
@@ -13,10 +9,6 @@
 </template>
 
 <style>
-<<<<<<< HEAD
-=======
-@import 'bootstrap/dist/css/bootstrap.min.css';
->>>>>>> origin/main
 
 /* 全站字體設定 */
 #app {

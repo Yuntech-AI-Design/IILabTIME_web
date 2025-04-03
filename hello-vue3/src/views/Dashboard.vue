@@ -1,5 +1,4 @@
 <template>
-<<<<<<< HEAD
   <div class="dashboard container mx-auto px-4 py-6">
     <h1 class="mb-4 text-2xl font-bold text-gray-800">您好，{{ currentUser?.name || '訪客' }}</h1>
 
@@ -113,19 +112,6 @@
               </li>
             </ul>
           </div>
-=======
-    <div class="dashboard">
-      <h1 class="mb-4">您好，{{ currentUser?.name || '訪客' }}</h1>
-
-      
-      <!-- 系統通知 -->
-      <div class="alert alert-info d-flex align-items-center" role="alert">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-info-circle-fill flex-shrink-0 me-2" viewBox="0 0 16 16">
-          <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412l-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
-        </svg>
-        <div>
-          請注意：本週的實習報告應在週五前提交。
->>>>>>> origin/main
         </div>
       </div>
 
@@ -214,7 +200,6 @@
         </div>
       </div>
     </div>
-<<<<<<< HEAD
   </div>
 </template>
 
@@ -231,25 +216,6 @@ export default {
 
     return {
       currentUser
-=======
-  </template>
-  
-  <script>
-  import { computed } from 'vue'
-  import { useStore } from 'vuex'
-  
-  export default {
-    name: 'Dashboard',
-    setup() {
-      const store = useStore()
-      
-      const currentUser = computed(() => store.getters['auth/currentUser'] || { name: '開發者測試帳號' })
-
-      
-      return {
-        currentUser
-      }
->>>>>>> origin/main
     }
   }
 }
