@@ -457,6 +457,7 @@
     </footer>
   </div>
 </template>
+<<<<<<< HEAD
 
 <script setup>
 import { ref } from 'vue'
@@ -520,4 +521,92 @@ const logout = () => {
 =======
 /* 任何額外的樣式可以在這裡添加 */
 >>>>>>> 6fdf5629 (:art: 新增 Tailwind CSS 支援，重構樣式與元件設計)
+=======
+<style scoped>
+/* 漸層區塊背景 */
+.hero-section,
+.cta-section {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: white;
+}
+
+/* 行動呼籲按鈕 */
+.btn-light {
+  background-color: white;
+  color: #6366f1;
+  border: 2px solid #6366f1;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  border-radius: 50px;
+  padding: 0.75rem 1.5rem;
+}
+
+.btn-light:hover {
+  background-color: #6366f1;
+  color: white;
+}
+
+/* 卡片樣式統一 */
+.card {
+  border: none;
+  border-radius: 1rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease;
+}
+.card:hover {
+  transform: translateY(-4px);
+}
+
+/* icon 圓背景美化 */
+.feature-icon {
+  width: 64px;
+  height: 64px;
+  font-size: 1.4rem;
+  background: linear-gradient(135deg, #8b5cf6, #6366f1);
+  color: white;
+  box-shadow: 0 6px 12px rgba(99, 102, 241, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+/* timeline 樣式 */
+.timeline {
+  position: relative;
+  margin-left: 1rem;
+  border-left: 2px solid #dee2e6;
+  padding-left: 1.5rem;
+}
+.timeline-item {
+  position: relative;
+  margin-bottom: 2rem;
+}
+.timeline-marker {
+  position: absolute;
+  left: -1.2rem;
+  top: 0.2rem;
+  width: 14px;
+  height: 14px;
+  background: #6366f1;
+  border-radius: 50%;
+  box-shadow: 0 0 0 4px #e0e7ff;
+}
+.timeline-content h4 {
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+/* stat 數字 */
+.stat-item h2 {
+  color: #4f46e5;
+  font-size: 2.5rem;
+  font-weight: bold;
+}
+.stat-item p {
+  font-size: 1rem;
+  color: #6c757d;
+}
+
+>>>>>>> origin/main
 </style>
