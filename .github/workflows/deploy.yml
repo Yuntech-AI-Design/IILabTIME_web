@@ -73,4 +73,6 @@ jobs:
             docker stop myapp || true
             docker rm myapp || true
             docker build -t myapp .
+            docker-compose down || true
+            docker-compose up -d --build
             docker run -d --name myapp --env-file backend/.env -p 8888:8888 myapp
