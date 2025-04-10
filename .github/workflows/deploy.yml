@@ -52,6 +52,17 @@ jobs:
           ls -l app || echo "❌ app 資料夾不存在"
           echo "✅ Dockerfile:"
           ls -l Dockerfile || echo "❌ Dockerfile 不存在"
+          
+      - name: 🛠 Create docker-app on server (if missing)
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            mkdir -p /home/${{ secrets.SSH_USER }}/docker-app
+      
 
       - name: 📦 Copy project to server
         uses: appleboy/scp-action@v0.1.3
