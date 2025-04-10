@@ -1,23 +1,53 @@
 <!-- src/components/AppNavbar.vue -->
 <template>
-  <nav class="bg-white w-full h-[100px] font-ZMG font-bold">
+  <nav class="fixed mt-[100px] top-0 w-full h-[100px] font-ZMG font-bold z-50 bg-white">
     <div class="flex items-center justify-center w-full h-full px-[10%]">
       <div class="flex items-center justify-center w-full h-full">
         <div class="flex items-center justify-center h-full w-[5%]">
-          <img class="h-[46px] w-[46px]" :src="logo" alt="logo" />
+          <img class="h-[48px] w-auto" :src="logo" alt="logo" />
         </div>
         <div class="flex items-center justify-center h-full w-[90%] text-center text-5xl">
           <router-link to="/" class="font-bold">實習管理系統</router-link>
         </div>
         <div class="flex items-center justify-center h-full w-[5%]">
-          <font-awesome-icon class="w-[46px] h-[46px]" :icon="['fas', 'list-ul']" />
+          <div @click="toggle_menu =! toggle_menu" class="grid gap-[6px] items-center w-[48px] h-[48px] cursor-pointer">
+            <div class="w-[48px] h-[6px] bg-black transition-all duration-300 origin-center"
+           :class="{ 'rotate-45 translate-y-[18px]': toggle_menu }"></div>
+            <div class="w-[48px] h-[6px] bg-black transition-all duration-300"
+           :class="{ 'opacity-0': toggle_menu }"></div>
+            <div class="w-[48px] h-[6px] bg-black transition-all duration-300 origin-center"
+           :class="{ '-rotate-45 -translate-y-[18px]': toggle_menu }"></div>
+          </div>
         </div>
       </div>
     </div>
   </nav>
-  <div class="float  h-full w-full bg-black">
-    
-  </div>
+  <transition
+    enter-active-class="duration-500 ease-out"
+    enter-from-class="transform opacity-0"
+    enter-to-class="opacity-100"
+    leave-active-class="duration-400 ease-in"
+    leave-from-class="opacity-100"
+    leave-to-class="transform opacity-0"
+  >
+    <div v-show="toggle_menu"
+      class="fixed z-30 top-[100px] h-[calc(100vh-100px)] inset-x-0 flex items-center justify-center w-full bg-white overflow-hidden font-ZMG"
+      @wheel.prevent
+      @touchmove.prevent
+      @scroll.prevent
+      >
+      <div class="flex-col items-center justify-center px-[10%] py-[5%] h-full w-full text-7xl overflow-auto">
+        <div class="flex-col items-center justify-center">
+          <div class="flex items-center justify-center w-full h-full text-center p-10">
+            <router-link to="/" class="font-bold" @click="toggle_menu = false">首頁</router-link>
+          </div>
+          <div class="flex items-center justify-center w-full h-full text-center p-10">
+            <router-link to="/" class="font-bold" @click="toggle_menu = false">AI專班實習管理系統</router-link>
+          </div>
+        </div>
+      </div>
+    </div>
+  </transition>
   <!-- <nav class="bg-gradient-to-r from-indigo-500/80 to-purple-500/80 backdrop-blur-md shadow-lg">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex items-center justify-between h-16">
@@ -85,15 +115,13 @@
   </nav> -->
 </template>
 
-<script>
+<script setup name="AppNavbar">
+import { ref } from "vue"; // Importing Vue's ref for reactivity
 import logo from "@/assets/logo.png"; // Adjust the path to your logo image
-export default {
-  name: "AppNavbar",
-  data() {
-    return {
-      mobileMenuOpen: false,
-      logo
-    };
-  },
-};
+const toggle_menu = ref(false); // State for mobile menu toggle
+// const ToggleMenu = () => {
+//   // Function to toggle the mobile menu state
+//   toggle_menu.value = !toggle_menu.value;
+// };
+// return { mobileMenuOpen, logo }
 </script>
