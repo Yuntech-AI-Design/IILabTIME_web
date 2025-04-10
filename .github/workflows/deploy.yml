@@ -43,11 +43,11 @@ jobs:
           cp backend/.env deploy/backend/
           cp backend/setup.sh deploy/backend/
           cp Dockerfile deploy/
-          cp docker-compose.yml deploy/ || echo "⚠️ 缺少 docker-compose.yml"
+          cp docker-compose.yml deploy/
 
           echo "📦 Packing deploy.zip..."
           cd deploy
-          zip -r ../deploy.zip Dockerfile backend/
+          zip -r ../deploy.zip Dockerfile docker-compose.yml backend/
 
       - name: Upload deploy.zip to server
         uses: appleboy/scp-action@v0.1.3
@@ -68,12 +68,20 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           script: |
             cd /home/${{ secrets.SSH_USER }}/docker-app
+
+            
+            rm -rf app_deploy
+            mkdir -p app_deploy
+
+            
             unzip -o deploy.zip -d app_deploy
             cd app_deploy
 
+            
             docker stop myapp || true
             docker rm myapp || true
+
+            
             docker build -t myapp .
             docker-compose down || true
             docker-compose up -d --build
-            docker run -d --name myapp --env-file backend/.env -p 8888:8888 myapp
