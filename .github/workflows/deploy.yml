@@ -5,7 +5,6 @@ on:
     branches:
       - main
       - JIE
-
   workflow_dispatch:
 
 jobs:
@@ -29,33 +28,25 @@ jobs:
           mvn clean package -DskipTests
           mkdir -p ../app
           cp target/*.jar ../app/app.jar
-          ls -l ../app/app.jar
 
       - name: Create .env from Secrets
         run: |
           echo "GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}" > backend/.env
           echo "GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}" >> backend/.env
           echo "SPRING_PROFILES_ACTIVE=test" >> backend/.env
-          cat backend/.env   # ✅ 建議保留列印，方便 debug
+          cat backend/.env
 
       - name: Zip deploy files
         run: |
-          mkdir -p deploy
-          cp app/app.jar deploy/ || echo "⚠️ 缺少 app.jar"
-          cp backend/.env deploy/ || echo "⚠️ 缺少 .env"
-          cp backend/setup.sh deploy/ || echo "⚠️ 缺少 setup.sh"
-          cp Dockerfile deploy/ || echo "⚠️ 缺少 Dockerfile"
+          mkdir -p deploy/backend
+          cp app/app.jar deploy/backend/
+          cp backend/.env deploy/backend/
+          cp backend/setup.sh deploy/backend/
+          cp Dockerfile deploy/
 
-          echo "📦 準備打包 deploy 資料夾內容："
-          ls -lh deploy
-
+          echo "📦 Packing deploy.zip..."
           cd deploy
-          if [ "$(ls -A .)" ]; then
-            zip ../deploy.zip *
-          else
-            echo "❌ deploy 資料夾是空的，取消打包"
-            exit 1
-          fi
+          zip -r ../deploy.zip Dockerfile backend/
 
       - name: Upload deploy.zip to server
         uses: appleboy/scp-action@v0.1.3
@@ -76,10 +67,10 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           script: |
             cd /home/${{ secrets.SSH_USER }}/docker-app
-            unzip -o deploy.zip -d .
-            chmod +x setup.sh
-            ./setup.sh
+            unzip -o deploy.zip -d app_deploy
+            cd app_deploy
+
             docker stop myapp || true
             docker rm myapp || true
-            docker build -t myapp-image .
-            docker run -d --name myapp --env-file .env -p 8080:8080 myapp-image
+            docker build -t myapp .
+            docker run -d --name myapp --env-file backend/.env -p 8888:8888 myapp

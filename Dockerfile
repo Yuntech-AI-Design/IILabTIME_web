@@ -3,9 +3,10 @@ LABEL authors="Cuzz_0908"
 
 FROM eclipse-temurin:21-jdk
 
+
 WORKDIR /app
 
-COPY app/app.jar app.jar
+COPY backend/app.jar app.jar
 COPY backend/setup.sh setup.sh
 COPY backend/.env .env
 
