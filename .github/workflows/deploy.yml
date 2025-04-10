@@ -10,6 +10,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     environment: Environment Server
+
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -22,15 +23,16 @@ jobs:
 
       - name: Build with Maven
         run: |
-          cd backend 
+          cd backend
           mvn clean package -DskipTests
-          rm -f target/*.jar.original
+          mkdir -p ../app
+          cp target/*.jar ../app/app.jar
 
       - name: Create .env from Secrets
         run: |
-          echo "GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}" > .env
-          echo "GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}" >> .env
-          echo "SPRING_PROFILES_ACTIVE=test" >> .env
+          echo "GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}" > backend/.env
+          echo "GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}" >> backend/.env
+          echo "SPRING_PROFILES_ACTIVE=test" >> backend/.env
 
       - name: Copy project to server
         uses: appleboy/scp-action@v0.1.3
@@ -39,7 +41,11 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SSH_PORT }}
-          source: "."
+          source: |
+            app/app.jar
+            backend/setup.sh
+            backend/.env
+            Dockerfile
           target: "/home/${{ secrets.SSH_USER }}/docker-app"
 
       - name: SSH - Build and Run Docker on server
