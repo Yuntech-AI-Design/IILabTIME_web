@@ -1,6 +1,24 @@
 <!-- src/components/AppNavbar.vue -->
 <template>
-  <nav class="bg-gradient-to-r from-indigo-500/80 to-purple-500/80 backdrop-blur-md shadow-lg">
+  <nav class="bg-white w-full h-[100px] font-ZMG font-bold">
+    <div class="flex items-center justify-center w-full h-full px-[10%]">
+      <div class="flex items-center justify-center w-full h-full">
+        <div class="flex items-center justify-center h-full w-[5%]">
+          <img class="h-[46px] w-[46px]" :src="logo" alt="logo" />
+        </div>
+        <div class="flex items-center justify-center h-full w-[90%] text-center text-5xl">
+          <router-link to="/" class="font-bold">實習管理系統</router-link>
+        </div>
+        <div class="flex items-center justify-center h-full w-[5%]">
+          <font-awesome-icon class="w-[46px] h-[46px]" :icon="['fas', 'list-ul']" />
+        </div>
+      </div>
+    </div>
+  </nav>
+  <div class="float  h-full w-full bg-black">
+    
+  </div>
+  <!-- <nav class="bg-gradient-to-r from-indigo-500/80 to-purple-500/80 backdrop-blur-md shadow-lg">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex items-center justify-between h-16">
         <div class="flex items-center">
@@ -64,15 +82,17 @@
         </router-link>
       </div>
     </div>
-  </nav>
+  </nav> -->
 </template>
 
 <script>
+import logo from "@/assets/logo.png"; // Adjust the path to your logo image
 export default {
   name: "AppNavbar",
   data() {
     return {
       mobileMenuOpen: false,
+      logo
     };
   },
 };

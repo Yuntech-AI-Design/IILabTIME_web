@@ -7,14 +7,17 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import { 
   faHome, faSignInAlt, faUserPlus, faGraduationCap, 
   faBriefcase, faCalendarCheck, faTrophy, faFileAlt, 
-  faComments, faQuestionCircle, faSignOutAlt, faUser 
+  faComments, faQuestionCircle, faSignOutAlt, faUser,
+  fas
 } from '@fortawesome/free-solid-svg-icons'
+import { fab } from '@fortawesome/free-brands-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 library.add(
   faHome, faSignInAlt, faUserPlus, faGraduationCap, 
   faBriefcase, faCalendarCheck, faTrophy, faFileAlt, 
-  faComments, faQuestionCircle, faSignOutAlt, faUser
+  faComments, faQuestionCircle, faSignOutAlt, faUser,
+  fab, fas
 )
 
 const app = createApp(App)
