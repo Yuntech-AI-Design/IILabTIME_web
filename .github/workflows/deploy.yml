@@ -59,7 +59,7 @@ jobs:
           source: "deploy.zip"
           target: "/home/${{ secrets.SSH_USER }}/docker-app"
 
-      - name: SSH - Unzip and Run Docker
+      - name: SSH - 部署並啟動 Docker Compose & App
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SSH_HOST }}
@@ -67,22 +67,14 @@ jobs:
           password: ${{ secrets.SSH_PASSWORD }}
           port: ${{ secrets.SSH_PORT }}
           script: |
-            cd /home/${{ secrets.SSH_USER }}/docker-app
+            cd /home/${{ secrets.SSH_USER }}/docker-app/app_deploy
+            unzip -o deploy.zip -d .
 
-            
-            rm -rf app_deploy
-            mkdir -p app_deploy
+            docker-compose down || true
+            docker-compose up -d
 
-            
-            unzip -o deploy.zip -d app_deploy
-            cd app_deploy
-
-            
             docker stop myapp || true
             docker rm myapp || true
 
-            
-            
-            docker-compose down || true
-            docker-compose up -d --build
             docker build -t myapp .
+            docker run -d --name myapp --env-file backend/.env -p 8888:8888 myapp
