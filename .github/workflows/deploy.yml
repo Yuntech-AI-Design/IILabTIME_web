@@ -29,12 +29,16 @@ jobs:
           mkdir -p ../app
           cp target/*.jar ../app/app.jar
 
-      - name: Create .env from Secrets
+      - name: Create .env for backend
         run: |
           echo "GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}" > backend/.env
           echo "GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}" >> backend/.env
           echo "SPRING_PROFILES_ACTIVE=test" >> backend/.env
-          cat backend/.env
+          echo "DB_HOST=postgres-db" >> backend/.env
+          echo "DB_PORT=5432" >> backend/.env
+          echo "DB_NAME=IILabTime" >> backend/.env
+          echo "DB_USER=admin" >> backend/.env
+          echo "DB_PASSWORD=1234" >> backend/.env
 
       - name: Zip deploy files
         run: |
@@ -44,10 +48,8 @@ jobs:
           cp backend/setup.sh deploy/backend/
           cp Dockerfile deploy/
           cp docker-compose.yml deploy/
-          
-          echo "📦 Packing deploy.zip..."
           cd deploy
-          zip -r ../deploy.zip Dockerfile docker-compose.yml backend/
+          zip -r ../deploy.zip .
 
       - name: Upload deploy.zip to server
         uses: appleboy/scp-action@v0.1.3
@@ -59,7 +61,7 @@ jobs:
           source: "deploy.zip"
           target: "/home/${{ secrets.SSH_USER }}/docker-app"
 
-      - name: SSH - 部署並啟動 Docker Compose & App
+      - name: SSH - Deploy & Start Compose
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SSH_HOST }}
@@ -72,17 +74,5 @@ jobs:
             unzip -o deploy.zip -d app_deploy
             cd app_deploy
 
-            # ✅ 啟動 PostgreSQL (docker-compose only)
-            docker-compose down -v || true
-            docker-compose up -d postgres-db
-
-            # ⏳ 等待 PostgreSQL 就緒
-            echo "⌛ Waiting for PostgreSQL to be ready..."
-            until docker exec $(docker ps -qf "name=postgres-db") pg_isready > /dev/null 2>&1; do sleep 1; done
-            echo "✅ PostgreSQL is ready"
-
-            # ✅ Build & run Spring Boot App
-            docker stop myapp || true
-            docker rm myapp || true
-            docker build -t myapp .
-            docker run -d --name myapp --env-file backend/.env -p 8888:8888 myapp
+            docker compose down -v || true
+            docker compose up -d --build
