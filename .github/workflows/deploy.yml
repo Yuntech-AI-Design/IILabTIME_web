@@ -44,7 +44,7 @@ jobs:
           cp backend/setup.sh deploy/backend/
           cp Dockerfile deploy/
           cp docker-compose.yml deploy/
-
+          
           echo "📦 Packing deploy.zip..."
           cd deploy
           zip -r ../deploy.zip Dockerfile docker-compose.yml backend/
@@ -67,14 +67,22 @@ jobs:
           password: ${{ secrets.SSH_PASSWORD }}
           port: ${{ secrets.SSH_PORT }}
           script: |
-            cd /home/${{ secrets.SSH_USER }}/docker-app/app_deploy
-            unzip -o deploy.zip -d .
+            cd /home/${{ secrets.SSH_USER }}/docker-app
+            rm -rf app_deploy
+            unzip -o deploy.zip -d app_deploy
+            cd app_deploy
 
+            # ✅ 啟動 PostgreSQL (docker-compose only)
             docker-compose down -v || true
-            docker-compose up -d
+            docker-compose up -d postgres-db
 
+            # ⏳ 等待 PostgreSQL 就緒
+            echo "⌛ Waiting for PostgreSQL to be ready..."
+            until docker exec $(docker ps -qf "name=postgres-db") pg_isready > /dev/null 2>&1; do sleep 1; done
+            echo "✅ PostgreSQL is ready"
+
+            # ✅ Build & run Spring Boot App
             docker stop myapp || true
             docker rm myapp || true
-
             docker build -t myapp .
             docker run -d --name myapp --env-file backend/.env -p 8888:8888 myapp
