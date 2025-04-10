@@ -36,15 +36,16 @@ jobs:
           echo "GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}" > backend/.env
           echo "GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}" >> backend/.env
           echo "SPRING_PROFILES_ACTIVE=test" >> backend/.env
+          cat backend/.env   # ✅ 建議保留列印，方便 debug
 
       - name: Zip deploy files
         run: |
           mkdir deploy
           cp app/app.jar deploy/
-          cp backend/.env deploy/
+          cp backend/.env deploy/       # ✅ 確保這行存在
           cp backend/setup.sh deploy/
           cp Dockerfile deploy/
-          cd deploy && zip ../deploy.zip *
+          cd deploy && zip ../deploy.zip 
 
       - name: Upload deploy.zip to server
         uses: appleboy/scp-action@v0.1.3
