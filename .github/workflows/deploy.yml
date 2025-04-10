@@ -27,12 +27,14 @@ jobs:
           mvn clean package -DskipTests
           mkdir -p ../app
           cp target/*.jar ../app/app.jar
+          ls -l ../app/app.jar
 
       - name: Create .env from Secrets
         run: |
           echo "GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}" > backend/.env
           echo "GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}" >> backend/.env
           echo "SPRING_PROFILES_ACTIVE=test" >> backend/.env
+          cat backend/.env
 
       - name: Copy project to server
         uses: appleboy/scp-action@v0.1.3
@@ -43,10 +45,16 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           source: |
             app/app.jar
-            backend/setup.sh
-            backend/.env
+            backend/*
             Dockerfile
           target: "/home/${{ secrets.SSH_USER }}/docker-app"
+
+      - name: List files before upload
+        run: |
+          echo "✅ backend/.env:"
+          cat backend/.env
+          echo "✅ app/"
+          ls -l app
 
       - name: SSH - Build and Run Docker on server
         uses: appleboy/ssh-action@master
