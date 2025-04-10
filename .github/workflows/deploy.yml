@@ -70,7 +70,7 @@ jobs:
             cd /home/${{ secrets.SSH_USER }}/docker-app/app_deploy
             unzip -o deploy.zip -d .
 
-            docker-compose down || true
+            docker-compose down -v || true
             docker-compose up -d
 
             docker stop myapp || true
