@@ -7,6 +7,7 @@ on:
       - JIE
 
   workflow_dispatch:
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -30,55 +31,32 @@ jobs:
           cp target/*.jar ../app/app.jar
           ls -l ../app/app.jar
 
-      - name: ❌ Cancel if JAR missing
-        run: |
-          if [ ! -f app/app.jar ]; then
-            echo "❌ 找不到 JAR，部署中止。"
-            exit 1
-          fi
-
       - name: Create .env from Secrets
         run: |
           echo "GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}" > backend/.env
           echo "GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}" >> backend/.env
           echo "SPRING_PROFILES_ACTIVE=test" >> backend/.env
-          cat backend/.env
 
-      - name: 🔍 List files before SCP
+      - name: Zip deploy files
         run: |
-          echo "✅ backend/.env:"
-          cat backend/.env || echo "❌ .env 不存在"
-          echo "✅ app/"
-          ls -l app || echo "❌ app 資料夾不存在"
-          echo "✅ Dockerfile:"
-          ls -l Dockerfile || echo "❌ Dockerfile 不存在"
-          
-      - name: 🛠 Create docker-app on server (if missing)
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          password: ${{ secrets.SSH_PASSWORD }}
-          port: ${{ secrets.SSH_PORT }}
-          script: |
-            mkdir -p /home/${{ secrets.SSH_USER }}/docker-app
-      
+          mkdir deploy
+          cp app/app.jar deploy/
+          cp backend/.env deploy/
+          cp backend/setup.sh deploy/
+          cp Dockerfile deploy/
+          cd deploy && zip ../deploy.zip *
 
-      - name: 📦 Copy project to server
+      - name: Upload deploy.zip to server
         uses: appleboy/scp-action@v0.1.3
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SSH_PORT }}
-          source: |
-            app/app.jar
-            backend/.env
-            backend/setup.sh
-            Dockerfile
+          source: "deploy.zip"
           target: "/home/${{ secrets.SSH_USER }}/docker-app"
 
-      - name: 🚀 SSH - Build and Run Docker on server
+      - name: SSH - Unzip and Run Docker
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SSH_HOST }}
@@ -87,9 +65,10 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           script: |
             cd /home/${{ secrets.SSH_USER }}/docker-app
-            chmod +x backend/setup.sh
-            ./backend/setup.sh
+            unzip -o deploy.zip -d .
+            chmod +x setup.sh
+            ./setup.sh
             docker stop myapp || true
             docker rm myapp || true
             docker build -t myapp-image .
-            docker run -d --name myapp --env-file backend/.env -p 8080:8080 myapp-image
+            docker run -d --name myapp --env-file .env -p 8080:8080 myapp-image
