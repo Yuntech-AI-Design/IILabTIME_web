@@ -40,12 +40,22 @@ jobs:
 
       - name: Zip deploy files
         run: |
-          mkdir deploy
-          cp app/app.jar deploy/
-          cp backend/.env deploy/       # ✅ 確保這行存在
-          cp backend/setup.sh deploy/
-          cp Dockerfile deploy/
-          cd deploy && zip ../deploy.zip 
+          mkdir -p deploy
+          cp app/app.jar deploy/ || echo "⚠️ 缺少 app.jar"
+          cp backend/.env deploy/ || echo "⚠️ 缺少 .env"
+          cp backend/setup.sh deploy/ || echo "⚠️ 缺少 setup.sh"
+          cp Dockerfile deploy/ || echo "⚠️ 缺少 Dockerfile"
+
+          echo "📦 準備打包 deploy 資料夾內容："
+          ls -lh deploy
+
+          cd deploy
+          if [ "$(ls -A .)" ]; then
+            zip ../deploy.zip *
+          else
+            echo "❌ deploy 資料夾是空的，取消打包"
+            exit 1
+          fi
 
       - name: Upload deploy.zip to server
         uses: appleboy/scp-action@v0.1.3
