@@ -5,7 +5,7 @@ FROM eclipse-temurin:21-jdk
 
 WORKDIR /app
 
-COPY target/backend-1.0-SNAPSHOT.jar app.jar
+COPY backend/target/backend-1.0-SNAPSHOT.jar app.jar
 COPY backend/setup.sh setup.sh
 
 RUN chmod +x setup.sh
