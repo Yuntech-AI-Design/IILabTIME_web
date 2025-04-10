@@ -40,7 +40,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SSH_PORT }}
           source: "."
-          target: "/home/${{ secrets.SSH_USER }}/docker-app""
+          target: "/home/${{ secrets.SSH_USER }}/docker-app"
 
       - name: SSH - Build and Run Docker on server
         uses: appleboy/ssh-action@master
