@@ -43,6 +43,7 @@ jobs:
           cp backend/.env deploy/backend/
           cp backend/setup.sh deploy/backend/
           cp Dockerfile deploy/
+          cp docker-compose.yml deploy/ || echo "⚠️ 缺少 docker-compose.yml"
 
           echo "📦 Packing deploy.zip..."
           cd deploy
