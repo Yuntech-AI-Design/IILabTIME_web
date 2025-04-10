@@ -22,5 +22,4 @@ public class TestController {
     public ApiResponse<String> test3(@RequestParam String ipt){
         return ApiResponse.ok(ipt);
     }
-    //test
 }

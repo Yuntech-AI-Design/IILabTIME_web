@@ -1,0 +1,55 @@
+name: Docker Deploy to Test Server
+
+on:
+  push:
+    branches:
+      - main
+      - JIE
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set up Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      - name: Build JAR
+        run: mvn clean package -DskipTests
+
+      - name: Create .env from Secrets
+        run: |
+          echo "GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}" > .env
+          echo "GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}" >> .env
+          echo "SPRING_PROFILES_ACTIVE=test" >> .env
+
+      - name: Copy project to server
+        uses: appleboy/scp-action@v0.1.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          port: ${{ secrets.SSH_PORT }}
+          username: ${{ secrets.SSH_USER }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          source: "."
+          target: "/home/${{ secrets.SSH_USER }}/docker-app"
+
+      - name: SSH - Build and Run Docker on server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          script: |
+            cd /home/${{ secrets.SSH_USER }}/docker-app
+            chmod +x backend/setup.sh
+            ./backend/setup.sh
+            docker stop myapp || true
+            docker rm myapp || true
+            docker build -t myapp-image .
+            docker run -d --name myapp --env-file .env -p 8080:8080 myapp-image
