@@ -73,6 +73,5 @@ jobs:
             rm -rf app_deploy
             unzip -o deploy.zip -d app_deploy
             cd app_deploy
-
-            docker compose down -v || true
-            docker compose up -d --build
+            echo ${{ secrets.SSH_PASSWORD }} | sudo -S docker compose down -v || true
+            echo ${{ secrets.SSH_PASSWORD }} | sudo -S docker compose up -d --build
