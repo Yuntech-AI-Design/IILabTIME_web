@@ -104,6 +104,7 @@ const router = createRouter({
   }
 })
 
+
 // 導航守衛
 // router.beforeEach((to, from, next) => {
 //   const isLoggedIn = store.getters['auth/isLoggedIn']
@@ -152,7 +153,14 @@ router.beforeEach((to, from, next) => {
       next()
     }
   }
+  store.dispatch("setLoading", true); // 開始載入
+  next(); // 繼續導航
 });
-// 在開發模式下跳過登入檢查
+
+router.afterEach(() => {
+  setTimeout(() => {
+    store.dispatch('setLoading', false); // 停止載入
+  }, 500) // 模擬過場，也避免 loading 閃一下就消失
+})
 
 export default router
