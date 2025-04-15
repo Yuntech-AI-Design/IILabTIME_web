@@ -2,24 +2,23 @@
 <template>
   <div id="app" class="flex flex-col min-h-screen bg-gray-100 text-gray-900">
     <app-navbar />
-    <main class="container mx-auto py-4 flex-grow">
-      <router-view />
+    <main class="w-full mx-auto flex-grow">
+      <LoadingSpinner v-if="isLoading" />
+      <router-view v-if="!isLoading" />
     </main>
     <app-footer />
   </div>
 </template>
 
-<script>
+<script setup name="App">
+import { useStore } from 'vuex';
+import { computed } from 'vue';
 import AppNavbar from './components/AppNavbar.vue'
 import AppFooter from './components/AppFooter.vue'
+import LoadingSpinner from './components/LoadingSpinner.vue'
 
-export default {
-  name: 'App',
-  components: {
-    AppNavbar,
-    AppFooter
-  }
-}
+const store = useStore()
+const isLoading = computed(() => store.getters.isLoading)
 </script>
 
 <style>

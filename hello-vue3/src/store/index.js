@@ -23,12 +23,15 @@ export default createStore({
   state: {
     loading: false,
     error: null,
-    notification: null
+    notification: null,
+    menuState: false,
+    loginState: false,
   },
   getters: {
     isLoading: state => state.loading,
     getError: state => state.error,
-    getNotification: state => state.notification
+    getNotification: state => state.notification,
+    getMenuState: state => state.menuState,
   },
   mutations: {
     SET_LOADING(state, status) {
@@ -45,9 +48,15 @@ export default createStore({
     },
     CLEAR_NOTIFICATION(state) {
       state.notification = null
+    },
+    SET_MENU_STATE(state, bool) {
+      state.menuState = bool
     }
   },
   actions: {
+    HandleMenuState({ commit }, bool) {
+      commit('SET_MENU_STATE', bool)
+    },
     setLoading({ commit }, status) {
       commit('SET_LOADING', status)
     },
