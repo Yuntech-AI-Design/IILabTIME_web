@@ -9,4 +9,4 @@ COPY backend/.env .env
 
 RUN chmod +x setup.sh
 
-CMD ["sh", "-c", "./setup.sh && java -jar app.jar"]
+CMD ["sh", "-c", "./setup.sh && java -jar -Dspring.profiles.active=test app.jar"]
