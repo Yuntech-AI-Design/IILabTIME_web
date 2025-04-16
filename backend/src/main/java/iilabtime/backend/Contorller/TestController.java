@@ -4,8 +4,7 @@ package iilabtime.backend.Contorller;
 import iilabtime.backend.ApiResponse;
 import org.springframework.web.bind.annotation.*;
 
-@AuthApiController
-@RequestMapping("/test")  // 基礎路徑為 /test
+@RequestMapping("/auth/api/test")  // 基礎路徑為 /test
 public class TestController extends AuthBaseController{
 
     @GetMapping("/test1")
