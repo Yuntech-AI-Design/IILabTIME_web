@@ -1,4 +1,3 @@
-FROM ubuntu:latest
 LABEL authors="Cuzz_0908"
 
 FROM eclipse-temurin:21-jdk
