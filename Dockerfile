@@ -1,12 +1,11 @@
 FROM eclipse-temurin:21-jdk
-LABEL authors="Cuzz_0908"
-
 WORKDIR /app
 
 COPY backend/app.jar app.jar
-COPY backend/setup.sh setup.sh
 COPY backend/.env .env
+COPY backend/setup.sh setup.sh
 
 RUN chmod +x setup.sh
 
-CMD ["sh", "-c", "./setup.sh && java -jar -Dspring.profiles.active=test app.jar"]
+# 用 ENTRYPOINT 來 source + run jar
+ENTRYPOINT [ "sh", "-c", ". ./setup.sh && exec java -jar app.jar" ]
