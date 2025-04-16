@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/test")  // 基礎路徑為 /test
-public class TestController {
+public class TestController extends AuthBaseController{
 
     @GetMapping("/test1")
     public String test1() {
