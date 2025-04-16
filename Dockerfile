@@ -1,7 +1,5 @@
-LABEL authors="Cuzz_0908"
-
 FROM eclipse-temurin:21-jdk
-
+LABEL authors="Cuzz_0908"
 
 WORKDIR /app
 
