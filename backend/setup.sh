@@ -26,6 +26,6 @@ while IFS='=' read -r key value || [ -n "$key" ]; do
         export "$key=$value"
         echo "已導入: $key=$value"
     fi
-done < ".env"
+done < .env
 
 echo "環境變量導入完成！"
