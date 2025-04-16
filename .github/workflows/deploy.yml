@@ -61,7 +61,7 @@ jobs:
           source: "deploy.zip"
           target: "/home/${{ secrets.SSH_USER }}/docker-app"
 
-      - name: SSH - Deploy & Start Compose
+      - name: SSH - Deploy and Start Containers
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SSH_HOST }}
@@ -73,5 +73,19 @@ jobs:
             rm -rf app_deploy
             unzip -o deploy.zip -d app_deploy
             cd app_deploy
-            echo ${{ secrets.SSH_PASSWORD }} | sudo -S docker compose down -v || true
-            echo ${{ secrets.SSH_PASSWORD }} | sudo -S docker compose up -d --build
+
+            
+            if [ "$(docker ps -q -f name=app_deploy_postgres-db_1)" = "" ]; then
+              echo "🔧 啟動 postgres-db..."
+              docker compose up -d postgres-db
+            else
+              echo "✅ postgres-db 已在運行中"
+            fi
+
+            
+            echo "⌛ 等待 PostgreSQL 起來..."
+            until docker exec $(docker ps -qf "name=postgres-db") pg_isready > /dev/null 2>&1; do sleep 1; done
+            echo "✅ PostgreSQL 就緒"
+
+            # 🔄 重建 App 容器
+            docker compose up -d --build spring-app
