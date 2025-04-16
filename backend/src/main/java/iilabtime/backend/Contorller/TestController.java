@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController
+@AuthApiController
 @RequestMapping("/test")  // 基礎路徑為 /test
 public class TestController {
 
