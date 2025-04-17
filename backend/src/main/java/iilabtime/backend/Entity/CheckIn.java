@@ -14,7 +14,7 @@ import java.util.UUID;
 public class CheckIn {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(columnDefinition = "UUID", updatable = false, nullable = false)
     private UUID id;
 
