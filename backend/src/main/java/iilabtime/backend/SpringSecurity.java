@@ -16,18 +16,10 @@ public class SpringSecurity {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-//                .authorizeHttpRequests(auth -> auth
-//                        .requestMatchers(
-//                                "/",                         // 首頁
-//                                "/swagger-ui/**",           // Swagger UI 頁面
-//                                "/api-docs",             // OpenAPI JSON 主路由
-//                                "/api-docs/**",          // 可能的子路由
-//                                "/swagger-resources/**",    // Swagger 資源
-//                                "/webjars/**",              // 靜態 JS/CSS 等
-//                                "/favicon.ico"              // 防止 favicon 被攔
-//                        ).permitAll()
-//                        .anyRequest().authenticated() // 其他都需要登入
-//              )
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/auth/api/**").authenticated() // 必須登入後才能訪問的路徑
+                        .anyRequest().permitAll() // 其他都於須
+              )
                 .oauth2Login(oauth ->
                         oauth.userInfoEndpoint(info -> info.userService(userOAuthServicer))
                 )

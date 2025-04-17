@@ -1,0 +1,91 @@
+name: Docker Deploy to Test Server
+
+on:
+  push:
+    branches:
+      - main
+      - JIE
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: Environment Server
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set up Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      - name: Build with Maven
+        run: |
+          cd backend
+          mvn clean package -DskipTests
+          mkdir -p ../app
+          cp target/*.jar ../app/app.jar
+
+      - name: Create .env for backend
+        run: |
+          echo "GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}" > backend/.env
+          echo "GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}" >> backend/.env
+          echo "SPRING_PROFILES_ACTIVE=test" >> backend/.env
+          echo "DB_HOST=postgres-db" >> backend/.env
+          echo "DB_PORT=5432" >> backend/.env
+          echo "DB_NAME=IILabTime" >> backend/.env
+          echo "DB_USER=admin" >> backend/.env
+          echo "DB_PASSWORD=1234" >> backend/.env
+
+      - name: Zip deploy files
+        run: |
+          mkdir -p deploy/backend
+          cp app/app.jar deploy/backend/
+          cp backend/.env deploy/backend/
+          cp backend/setup.sh deploy/backend/
+          cp Dockerfile deploy/
+          cp docker-compose.yml deploy/
+          cd deploy
+          zip -r ../deploy.zip .
+
+      - name: Upload deploy.zip to server
+        uses: appleboy/scp-action@v0.1.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          source: "deploy.zip"
+          target: "/home/${{ secrets.SSH_USER }}/docker-app"
+
+      - name: SSH - Deploy and Start Containers
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            cd /home/${{ secrets.SSH_USER }}/docker-app
+            rm -rf app_deploy
+            unzip -o deploy.zip -d app_deploy
+            cd app_deploy
+
+            
+            if [ "$(docker ps -q -f name=app_deploy_postgres-db_1)" = "" ]; then
+              echo "🔧 啟動 postgres-db..."
+              docker compose up -d postgres-db
+            else
+              echo "✅ postgres-db 已在運行中"
+            fi
+
+            
+            echo "⌛ 等待 PostgreSQL 起來..."
+            until docker exec $(docker ps -qf "name=postgres-db") pg_isready > /dev/null 2>&1; do sleep 1; done
+            echo "✅ PostgreSQL 就緒"
+
+            # 🔄 重建 App 容器
+            docker compose up -d --build spring-app
