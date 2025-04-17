@@ -3,6 +3,7 @@ package iilabtime.backend.Entity;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Getter
@@ -13,8 +14,9 @@ import java.time.LocalDateTime;
 public class CheckIn {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue
+    @Column(columnDefinition = "UUID", updatable = false, nullable = false)
+    private UUID id;
 
     // 關聯 User
     @ManyToOne(fetch = FetchType.LAZY)
