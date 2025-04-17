@@ -14,9 +14,8 @@ import java.util.UUID;
 public class CheckIn {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(columnDefinition = "UUID", updatable = false, nullable = false)
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     // 關聯 User
     @ManyToOne(fetch = FetchType.LAZY)
