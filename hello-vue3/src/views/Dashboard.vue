@@ -105,7 +105,7 @@
             </h5>
             <div class="grid gap-4">
               <router-link v-for="(action, index) in quickActions" :key="index" :to="action.to"
-                           class="flex items-center px-6 py-3 bg-Ghibli-blue text-white rounded-lg hover:scale-105 transition-all duration-300 opacity-0"
+                           class="flex items-center px-6 py-3 rounded-lg shadow-lg hover:scale-105 transition-all duration-300 opacity-0"
                            :class="{ 'animate-fade-in-right': mainContentVisible }"
                            :style="`animation-delay: ${0.3 + index * 0.2}s`">
                 <component :is="action.icon" class="w-6 h-6 mr-3" />
@@ -254,7 +254,7 @@ const weeklyProgressData = computed(() => ({
   datasets: [
     {
       data: [weeklyProgress.value || 0, 100 - (weeklyProgress.value || 0)],
-      backgroundColor: ["#6C96A3", "#E5E7EB"],
+      backgroundColor: ["#64544C", "#E5E7EB"],
       borderWidth: 0,
     },
   ],
@@ -265,7 +265,7 @@ const totalProgressData = computed(() => ({
   datasets: [
     {
       data: [totalProgress.value || 0, 100 - (totalProgress.value || 0)],
-      backgroundColor: ["#10B981", "#E5E7EB"],
+      backgroundColor: ["#E4B584", "#E5E7EB"],
       borderWidth: 0,
     },
   ],
