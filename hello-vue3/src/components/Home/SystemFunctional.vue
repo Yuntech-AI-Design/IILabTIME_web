@@ -2,8 +2,9 @@
     <section class="h-[100vh] relative w-full" id="about" ref="sectionRef">
         <transition name="fade">
             <div v-show="isVisible" class="ball-background absolute top-0 left-0 w-full h-full overflow-x-clip">
-                <span v-for="(ball, i) in balls" :key="i" class="z-10 absolute rounded-full"
-                    :class="[ball.bg, ball.animation]" :style="ball.style"></span>
+                <!-- <span v-for="(ball, i) in balls" :key="i" class="z-10 absolute rounded-full"
+                    :class="[ball.bg, ball.animation]" :style="ball.style"></span> -->
+                <BallBackground />
                 <span
                     class="z-0 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-full bg-Ghibli-yellow h-[672px] w-[672px]"
                     :class="{ 'animate-pulse-slow-absolute': isVisible }"></span>
@@ -36,21 +37,22 @@
 <script setup>
 import { ref } from 'vue'
 import { useIntersectionObserver } from '@/composables/useIntersectionObserver'; // Assuming you create this
+import BallBackground from '@/components/Background/BallBackground.vue'; // Assuming you create this
 
 const sectionRef = ref(null);
 const { isVisible } = useIntersectionObserver(sectionRef, { threshold: 0.1 });
 
 // Animated balls data
-const balls = [
-    { bg: 'bg-Ghibli-blue', animation: 'animate-float', style: 'top: 69%; left: 32%; height: 211px; width: 211px;' },
-    { bg: 'bg-Ghibli-red', animation: 'animate-float-delay-1', style: 'top: 63%; left: 55%; height: 124px; width: 124px;' },
-    { bg: 'bg-Ghibli-light-red', animation: 'animate-float-delay-2', style: 'top: 46%; left: 67.7%; height: 85px; width: 85px;' },
-    { bg: 'bg-Ghibli-skin', animation: 'animate-float-delay-3', style: 'top: 16%; left: 63%; height: 85px; width: 85px;' },
-    { bg: 'bg-Ghibli-green', animation: 'animate-float-delay-4', style: 'top: 0%; left: 0%; height: 323px; width: 323px;' },
-    { bg: 'bg-Ghibli-brown', animation: 'animate-float-delay-1', style: 'top: -5%; left: 32%; height: 158px; width: 158px;' },
-    { bg: 'bg-Ghibli-blue', animation: 'animate-float-delay-2', style: 'top: -7%; left: 70%; height: 132px; width: 132px;' },
-    { bg: 'bg-Ghibli-brown', animation: 'animate-float-delay-3', style: 'top: 50%; left: 85%; height: 532px; width: 532px;' }
-]
+// const balls = [
+//     { bg: 'bg-Ghibli-blue', animation: 'animate-float', style: 'top: 69%; left: 32%; height: 211px; width: 211px;' },
+//     { bg: 'bg-Ghibli-red', animation: 'animate-float-delay-1', style: 'top: 63%; left: 55%; height: 124px; width: 124px;' },
+//     { bg: 'bg-Ghibli-light-red', animation: 'animate-float-delay-2', style: 'top: 46%; left: 67.7%; height: 85px; width: 85px;' },
+//     { bg: 'bg-Ghibli-skin', animation: 'animate-float-delay-3', style: 'top: 16%; left: 63%; height: 85px; width: 85px;' },
+//     { bg: 'bg-Ghibli-green', animation: 'animate-float-delay-4', style: 'top: 0%; left: 0%; height: 323px; width: 323px;' },
+//     { bg: 'bg-Ghibli-brown', animation: 'animate-float-delay-1', style: 'top: -5%; left: 32%; height: 158px; width: 158px;' },
+//     { bg: 'bg-Ghibli-blue', animation: 'animate-float-delay-2', style: 'top: -7%; left: 70%; height: 132px; width: 132px;' },
+//     { bg: 'bg-Ghibli-brown', animation: 'animate-float-delay-3', style: 'top: 50%; left: 85%; height: 532px; width: 532px;' }
+// ]
 
 // System features data
 const systemSides = [
