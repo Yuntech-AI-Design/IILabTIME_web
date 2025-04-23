@@ -26,7 +26,7 @@
     leave-active-class="transition-opacity duration-700 ease-in-out" enter-from-class="opacity-0"
     leave-to-class="opacity-0">
     <div v-if="menuState === true"
-      class="fixed z-30 top-20 h-[100vh] inset-x-0 flex items-center justify-center w-full bg-white overflow-hidden font-ZMG"
+      class="fixed z-30 pt-[10vh] h-[100vh] inset-x-0 flex items-center justify-center w-full bg-white overflow-hidden font-ZMG"
       @wheel.prevent @touchmove.prevent @scroll.prevent>
       <div class="flex-col items-center justify-center px-[10%] h-full w-full text-6xl overflow-auto">
         <div :key="router.key" v-for="router in routerList" class="flex-col items-center justify-center">
@@ -118,6 +118,6 @@ const routerList = reactive([
   { key: 2, name: "管理系統", path: "/dashboard" },
   { key: 3, name: "實習打卡", path: "/check-in" },
   { key: 4, name: "個人資料", path: "/profile" },
-  { key: 5, name: "實習資料填寫", path: "/intershipform" },
+  // { key: 5, name: "實習資料填寫", path: "/intershipform" },
 ]);
 </script>
