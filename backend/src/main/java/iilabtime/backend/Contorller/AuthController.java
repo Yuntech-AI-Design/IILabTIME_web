@@ -6,11 +6,9 @@ import iilabtime.backend.Repository.UserRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Optional;
 
@@ -28,35 +26,61 @@ public class AuthController {
     @Operation(summary = "取得登入的使用者資訊")
     @GetMapping("/oauth2/authorization/google")
     public ApiResponse<Object> google_login(@AuthenticationPrincipal OAuth2User user) {
-        if(user != null){
-            String email = user.getAttribute("email");
-            Optional<User> user1 = userRepository.findByEmail(email);
-            String RealName = user1.get().getRealName();
-            Map<String, String> data = Map.of("RealName", RealName);
-
-            if(RealName != null){
-                return ApiResponse.ok(data);
-            }else{
-                return ApiResponse.fail("尚未設定真實姓名");
-            }
-
-        }else{
+        if (user == null) {
             return ApiResponse.fail("未登入");
+        }
+
+        String email = user.getAttribute("email");
+        Optional<User> optionalUser = userRepository.findByEmail(email);
+
+        User dbUser;
+        if (optionalUser.isEmpty()) {
+            dbUser = new User();
+            dbUser.setEmail(email);
+            dbUser.setMailName(user.getAttribute("name"));
+            dbUser.setMailPicture(user.getAttribute("picture"));
+            dbUser.setRealName(null);
+            dbUser.setCreateTime(LocalDateTime.now());
+            userRepository.save(dbUser);
+            return ApiResponse.fail("請設定真實姓名");
+        } else {
+            dbUser = optionalUser.get();
+        }
+
+        String realName = dbUser.getRealName();
+
+        if (!realName.isBlank()) {
+            return ApiResponse.ok(Map.of("RealName", realName));
+        } else {
+            return ApiResponse.fail("尚未設定真實姓名");
         }
     }
 
     @Operation(summary = "設定真實姓名")
     @PostMapping("/oauth2/authorization/SetRealName")
-    public ApiResponse<Object> setrealname(@AuthenticationPrincipal OAuth2User user, @RequestBody String RealName){
-        String email = user.getAttribute("email");
-        Optional<User> user1 = userRepository.findByEmail(email);
-        user1.get().setRealName(RealName);
-        if(user1.get().getRealName() != null){
-            return ApiResponse.ok(null);
-        }else{
-            return ApiResponse.fail("error");
+    public ApiResponse<Object> setRealName(@AuthenticationPrincipal OAuth2User user,
+                                           @RequestParam String realName) {
+        if (user == null) {
+            return ApiResponse.fail("未登入");
         }
 
+        String email = user.getAttribute("email");
+        Optional<User> optionalUser = userRepository.findByEmail(email);
+
+        if (optionalUser.isEmpty()) {
+            return ApiResponse.fail("使用者不存在");
+        }
+
+        User dbUser = optionalUser.get();
+
+        if (realName.isBlank()) {
+            return ApiResponse.fail("請提供有效的真實姓名");
+        }
+
+        dbUser.setRealName(realName);
+        userRepository.save(dbUser);
+
+        return ApiResponse.ok("真實姓名已成功設定");
     }
 
 }
