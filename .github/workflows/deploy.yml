@@ -4,8 +4,6 @@ on:
   push:
     branches:
       - main
-      - JIE
-      - lindaline
   workflow_dispatch:
 
   workflow_dispatch:

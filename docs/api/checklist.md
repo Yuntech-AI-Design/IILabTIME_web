@@ -2,8 +2,9 @@
 
 ```
 ├── CheckIn/
+│   ├── [ ] CheckIn.md
+│   ├── [ ] CheckOut.md
 │   └── [ ] CountCheckIn.md
-├── dashborad/
 ├── Internship/
 │   ├── [ ] CountInternshipTime.md
 │   ├── [ ] ThisWeekInternshipWork.md
@@ -13,9 +14,11 @@
 │       ├── [ ] google.md
 │       └── [ ] SetRealName.md
 ├── Project/
-│   └── [ ] CountUploadProject.md
-├── [ ] rules.md
-└── [ ] template.md
+│   ├── [ ] CountUploadProject.md
+│   ├── [ ] UploadImage.md
+│   └── [ ] UploadProject.md
+├── [x] rules.md
+└── [x] template.md
 ```
 
 *Checklist generated automatically.*
