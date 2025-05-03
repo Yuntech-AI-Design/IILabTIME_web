@@ -41,4 +41,5 @@ const buttonList = [
     { id: "2", routerLink: "#about", buttonText: "關於我們", buttonIcon: ['fas', 'info-circle'], backgroundColor: "bg-Ghibli-green" },
     { id: "1", routerLink: "/login", buttonText: "Google 登入", buttonIcon: ['fab', 'google-plus'], backgroundColor: "bg-Ghibli-blue" }
 ]
+
 </script>

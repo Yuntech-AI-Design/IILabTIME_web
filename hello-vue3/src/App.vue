@@ -1,6 +1,6 @@
 <!-- App.vue -->
 <template>
-  <div id="app" class="flex flex-col min-h-screen bg-gray-100 text-gray-900">
+  <div id="app" class="flex flex-col min-h-screen bg-white text-gray-900">
     <app-navbar />
     <main class="w-full mx-auto flex-grow">
       <LoadingSpinner v-if="isLoading" />

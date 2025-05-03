@@ -14,6 +14,7 @@ import { fab } from '@fortawesome/free-brands-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 // import { typeWriterLoop } from './directives/typeWriter'
 import { typingAnimation } from './directives/typingAnimation'
+import { CharBounce } from './directives/AllCharBounce'
 
 library.add(
   faHome, faSignInAlt, faUserPlus, faGraduationCap, 
@@ -22,10 +23,12 @@ library.add(
   fab, fas
 )
 
+
 const app = createApp(App)
 
 app.component('font-awesome-icon', FontAwesomeIcon)
 app.directive('typeWriterLoop', typingAnimation)
+app.directive('allCharBounce', CharBounce)
 app.use(router)
 app.use(store)
 app.mount('#app')
