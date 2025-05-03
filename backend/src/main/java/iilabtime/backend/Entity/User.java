@@ -7,6 +7,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Table(name = "app_user")
@@ -37,4 +39,7 @@ public class User {
 
     @Column(name = "create_time")
     private LocalDateTime createTime;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<CheckIn> checkIns;
 }
