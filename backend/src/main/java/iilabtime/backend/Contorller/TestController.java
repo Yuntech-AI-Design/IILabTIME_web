@@ -18,8 +18,8 @@ public class TestController extends AuthBaseController{
         return "Hello from test2";
     }
 
-    @PostMapping("/test3")
-    public ApiResponse<String> test3(@RequestParam String ipt){
-        return ApiResponse.ok(ipt);
-    }
+//    @PostMapping("/test3")
+//    public ApiResponse<String> test3(@RequestParam String ipt){
+//        return ApiResponse.ok(ipt);
+//    }
 }

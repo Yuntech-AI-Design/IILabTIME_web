@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - JIE
+      - lindaline
   workflow_dispatch:
 
 jobs:
