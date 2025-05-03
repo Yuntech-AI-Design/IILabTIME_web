@@ -43,40 +43,84 @@ export const CharBounce = {
         findLeafNodes(el);
 
         const handlersForEl = []; // Array to store handlers for this specific element's leaf nodes
+        const nodesToReplace = [];
 
         leafNodes.forEach(node => {
-            // Apply initial styles if needed (e.g., display: inline-block)
-            const style = window.getComputedStyle(node);
-            if (style.display === 'inline') {
-                node.style.display = 'inline-block'; // Necessary for transforms
+            console.log(node)
+            if (node.textContent.trim() != '') {
+                const text = node.textContent;
+                const fragment = document.createDocumentFragment();
+                for (let i = 0; i < text.length; i++) {
+                    const char = text[i];
+                    if (/\S/.test(char)) { // Check if the character is non-whitespace
+                        const span = document.createElement('span');
+                        span.textContent = char;
+                        span.style.display = 'inline-block'; // Necessary for transforms
+
+                        // Define handlers specific to this character span
+                        const mouseoverHandler = () => {
+                            anime.remove(span); // Stop existing animation
+                            anime({ targets: span, ...bounceAnimation });
+                        };
+                        const mouseoutHandler = () => {
+                            anime.remove(span); // Stop existing animation
+                            anime({ targets: span, ...resetAnimationConfig });
+                        };
+
+                        // Add listeners directly to the character span
+                        span.addEventListener('mouseover', mouseoverHandler);
+                        span.addEventListener('mouseout', mouseoutHandler);
+
+                        // Store the span and its handlers for cleanup
+                        handlersForEl.push({ node: span, mouseoverHandler, mouseoutHandler });
+                        fragment.appendChild(span);
+                    } else {
+                        // Append whitespace as a text node
+                        fragment.appendChild(document.createTextNode(char));
+                    }
+                }
+                // Mark the original node for replacement with the fragment
+                nodesToReplace.push({ original: node, replacement: fragment });
+            } else {
+                // Apply initial styles if needed (e.g., display: inline-block)
+                const style = window.getComputedStyle(node);
+                if (style.display === 'inline') {
+                    node.style.display = 'inline-block'; // Necessary for transforms
+                }
+
+                // Define handlers specific to this node
+                const mouseoverHandler = () => {
+                    anime.remove(node); // Stop existing animation on this node
+                    anime({
+                        targets: node,
+                        ...bounceAnimation
+                    });
+                };
+                const mouseoutHandler = () => {
+                    anime.remove(node); // Stop existing animation on this node
+                    anime({
+                        targets: node,
+                        ...resetAnimationConfig
+                    });
+                };
+
+                // Add listeners directly to the leaf node
+                node.addEventListener('mouseover', mouseoverHandler);
+                node.addEventListener('mouseout', mouseoutHandler);
+
+                // Store the node and its handlers for cleanup
+                handlersForEl.push({ node, mouseoverHandler, mouseoutHandler });
             }
-
-            // Define handlers specific to this node
-            const mouseoverHandler = () => {
-                anime.remove(node); // Stop existing animation on this node
-                anime({
-                    targets: node,
-                    ...bounceAnimation
-                });
-            };
-            const mouseoutHandler = () => {
-                anime.remove(node); // Stop existing animation on this node
-                anime({
-                    targets: node,
-                    ...resetAnimationConfig
-                });
-            };
-
-            // Add listeners directly to the leaf node
-            node.addEventListener('mouseover', mouseoverHandler);
-            node.addEventListener('mouseout', mouseoutHandler);
-
-            // Store the node and its handlers for cleanup
-            handlersForEl.push({ node, mouseoverHandler, mouseoutHandler });
+        });
+        nodesToReplace.forEach(({ original, replacement }) => {
+            console.log(original, replacement)
+            original.innerText = ''; // Clear the original node's content
+            original.appendChild(replacement); // Append the new fragment
         });
 
         // Store the array of handlers associated with the root element
         if (handlersForEl.length > 0) {
+            console.log(handlersForEl)
             nodeHandlersMap.set(el, handlersForEl);
         }
     },
