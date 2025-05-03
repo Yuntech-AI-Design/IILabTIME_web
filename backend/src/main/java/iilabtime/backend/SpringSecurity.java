@@ -18,11 +18,14 @@ public class SpringSecurity {
         http
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/api/**").authenticated() // 必須登入後才能訪問的路徑
-                        .anyRequest().permitAll() // 其他都於須
+                        .anyRequest().permitAll()
               )
                 .oauth2Login(oauth ->
                         oauth.userInfoEndpoint(info -> info.userService(userOAuthServicer))
                 )
+                .exceptionHandling(ex ->{
+                    ex.authenticationEntryPoint(new RestAuthenticationEntryPoint());
+                })
                 .logout(logout -> logout
                         .logoutSuccessUrl("/")               // 登出後回首頁
                         .invalidateHttpSession(true)

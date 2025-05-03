@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.*;
 public class TestController extends AuthBaseController{
 
     @GetMapping("/test1")
-    public String test1() {
-        return "Hello from test1";
+    public ApiResponse<String> test1() {
+        return ApiResponse.ok("123");
     }
 
     @GetMapping("/test2")
