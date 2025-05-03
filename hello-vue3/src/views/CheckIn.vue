@@ -1,8 +1,8 @@
 <template>
   <div class="checkin-dashboard bg-white font-ZMG min-h-screen relative">
     <!-- 浮動圓球背景 -->
-    <div class="ball-background absolute top-0 left-0 w-full h-full overflow-x-clip z-0 pointer-events-none">
-      <BallBackground :random="true" :randomColor="true" />
+    <div class="ball-background absolute top-0 left-0 w-full h-full overflow-x-clip z-0 pointer-events-none opacity-60">
+      <BallBackground :random="true" :randomColor="true"/>
     </div>
 
     <!-- 子組件 -->

@@ -1,5 +1,5 @@
 <template>
-  <div class="login-page bg-white font-ZMG min-h-screen flex items-center justify-center">
+  <div class=" relative min-h-screen overflow-hidden bg-white font-ZMG flex items-center justify-center">
     <div class="w-full max-w-md bg-white border-4 border-stone-950 rounded-xl shadow-xl overflow-hidden relative z-10">
       <div class="py-6 px-8 border-b-4 border-stone-950">
         <h4 class="text-3xl font-bold flex items-center">
@@ -24,13 +24,11 @@
         </div>
 
         <button v-allCharBounce @click="handleGoogleLogin"
-          class="w-full bg-Ghibli-red hover:bg-Ghibli-yellow hover:text-Ghibli-red text-xl font-bold py-4 rounded-xl flex items-center justify-center gap-3  shadow-lg transition-all duration-200">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-google"
-            viewBox="0 0 16 16">
-            <path
-              d="M15.545 6.558a9.42 9.42 0 0 1 .139 1.626c0 2.434-.87 4.492-2.384 5.885h.002C11.978 15.292 10.158 16 8 16A8 8 0 1 1 8 0a7.689 7.689 0 0 1 5.352 2.082l-2.284 2.284A4.347 4.347 0 0 0 8 3.166c-2.087 0-3.86 1.408-4.492 3.304a4.792 4.792 0 0 0 0 3.063h.003c.635 1.893 2.405 3.301 4.492 3.301 1.078 0 2.004-.276 2.722-.764h-.003a3.702 3.702 0 0 0 1.599-2.431H8v-3.08h7.545z" />
-          </svg>
-          使用 Google 帳號登入
+          class="w-full text-xl font-bold py-4 rounded-xl flex items-center justify-center gap-3  shadow-lg transition-all duration-200">
+          <font-awesome-icon :icon="['fab', 'fa-google']" />
+          <div>
+            使用 Google 帳號登入
+          </div>
         </button>
 
         <p class="text-center text-base mt-8">
@@ -193,24 +191,12 @@ export default {
 </script>
 
 <style scoped>
-/* Ghibli custom colors (for reference, should be defined in Tailwind config)
-.bg-Ghibli-blue { background-color: #3B82F6; }
-.bg-Ghibli-yellow { background-color: #E4B584; }
-.bg-Ghibli-red { background-color: #E57373; }
-.bg-Ghibli-green { background-color: #81C784; }
-.bg-Ghibli-brown { background-color: #64544C; }
-.bg-Ghibli-light-red { background-color: #FDE8E8; }
-.text-Ghibli-blue { color: #3B82F6; }
-.text-Ghibli-yellow { color: #E4B584; }
-.text-Ghibli-red { color: #E57373; }
-.text-Ghibli-green { color: #81C784; }
-.text-Ghibli-brown { color: #64544C; }
-.text-Ghibli-light-red { color: #FDE8E8; }
-.font-ZMG { font-family: 'Zen Maru Gothic', 'Noto Sans TC', 'Microsoft JhengHei', sans-serif; }
-*/
-.login-page {
-  position: relative;
-  min-height: 100vh;
-  overflow: hidden;
+
+.fa-google {
+  background: conic-gradient(from -45deg, #ea4335 110deg, #4285f4 90deg 180deg, #34a853 180deg 270deg, #fbbc05 270deg) 73% 55%/150% 150% no-repeat;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
 }
 </style>
