@@ -17,7 +17,7 @@ public class SpringSecurity {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/api/**").authenticated() // 必須登入後才能訪問的路徑
+                        //.requestMatchers("/auth/api/**").authenticated() // 必須登入後才能訪問的路徑
                         .anyRequest().permitAll() // 其他都於須
               )
                 .oauth2Login(oauth ->

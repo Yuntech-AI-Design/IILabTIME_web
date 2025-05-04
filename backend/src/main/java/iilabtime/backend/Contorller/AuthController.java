@@ -13,9 +13,13 @@ import java.util.Map;
 import java.util.Optional;
 
 @RestController
-public class AuthController {
+public class AuthController extends AuthBaseController{
 
     private UserRepository userRepository;
+    public AuthController(UserRepository userRepository) {
+        super(userRepository);
+        this.userRepository = userRepository;
+    }
 
     @Operation(summary = "取得目前登入的使用者資訊")
     @GetMapping("/me")
