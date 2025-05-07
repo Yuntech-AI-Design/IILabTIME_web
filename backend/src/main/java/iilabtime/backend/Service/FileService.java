@@ -40,6 +40,7 @@ public class FileService {
             }
 
             Path filePath = Paths.get(dir.getAbsolutePath(), originalFilename);
+            System.out.println(filePath);
             try {
                 image.transferTo(filePath);
             } catch (IOException e) {
