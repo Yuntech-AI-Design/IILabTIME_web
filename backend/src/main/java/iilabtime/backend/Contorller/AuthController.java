@@ -61,7 +61,7 @@ public class AuthController extends AuthBaseController{
     }
 
     @Operation(summary = "設定真實姓名")
-    @PostMapping("/oauth2/authorization/SetRealName")
+    @PostMapping("SetRealName")
     public ApiResponse<Object> setRealName(@AuthenticationPrincipal OAuth2User user,
                                            @RequestParam String realName) {
         if (user == null) {
