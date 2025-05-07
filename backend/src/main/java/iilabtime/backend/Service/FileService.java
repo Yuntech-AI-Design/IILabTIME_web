@@ -2,6 +2,7 @@ package iilabtime.backend.Service;
 
 import iilabtime.backend.Entity.FileStorage;
 import iilabtime.backend.Entity.User;
+import iilabtime.backend.Errors.InternalServerError;
 import iilabtime.backend.Repository.FileRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,6 +34,10 @@ public class FileService {
 
         for (MultipartFile image : images) {
             String originalFilename = image.getOriginalFilename();
+            String contentType = image.getContentType();
+            if (originalFilename == null || !isImageValid(originalFilename, contentType)) {
+                throw new InternalServerError("檔案格式不支援，僅限 jpg, jpeg, png：" + originalFilename);
+            }
 
             Path filePath = Paths.get(dir.getAbsolutePath(), originalFilename);
             try {
@@ -42,5 +47,15 @@ public class FileService {
             }
         }
         return storageId;
+    }
+
+    private boolean isImageValid(String filename, String contentType) {
+        String lowerName = filename.toLowerCase();
+        boolean extValid = lowerName.endsWith(".jpg") || lowerName.endsWith(".jpeg") || lowerName.endsWith(".png");
+        boolean mimeValid = contentType != null && (
+                contentType.equals("image/jpeg") ||
+                        contentType.equals("image/png")
+        );
+        return extValid && mimeValid;
     }
 }
