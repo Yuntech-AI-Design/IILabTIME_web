@@ -17,7 +17,7 @@ import java.nio.file.Paths;
 public class FileService {
     @Autowired
     private FileRepository fileRepository;
-    private final String uploadDir = "uploads";
+    private final String uploadDir = "./uploads";
 
     public long uploadFiles(MultipartFile[] images, User user){
         FileStorage fileStorage = fileRepository.save(
