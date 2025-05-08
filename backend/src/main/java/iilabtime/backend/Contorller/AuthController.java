@@ -28,7 +28,7 @@ public class AuthController extends AuthBaseController{
     }
 
     @Operation(summary = "取得登入的使用者資訊")
-    @GetMapping("/oauth2/authorization/google")
+    @GetMapping("/Google-Login")
     public ApiResponse<Object> google_login(@AuthenticationPrincipal OAuth2User user) {
         if (user == null) {
             return ApiResponse.fail("未登入");
@@ -37,31 +37,17 @@ public class AuthController extends AuthBaseController{
         String email = user.getAttribute("email");
         Optional<User> optionalUser = userRepository.findByEmail(email);
 
-        User dbUser;
-        if (optionalUser.isEmpty()) {
-            dbUser = new User();
-            dbUser.setEmail(email);
-            dbUser.setMailName(user.getAttribute("name"));
-            dbUser.setMailPicture(user.getAttribute("picture"));
-            dbUser.setRealName(null);
-            dbUser.setCreateTime(LocalDateTime.now());
-            userRepository.save(dbUser);
-            return ApiResponse.fail("請設定真實姓名");
-        } else {
-            dbUser = optionalUser.get();
+        User dbuser = optionalUser.get();
+        String realname = dbuser.getRealName();
+        if (realname == null){
+            return ApiResponse.fail("RealName:" + null);
         }
 
-        String realName = dbUser.getRealName();
-
-        if (!realName.isBlank()) {
-            return ApiResponse.ok(Map.of("RealName", realName));
-        } else {
-            return ApiResponse.fail("尚未設定真實姓名");
-        }
+        return ApiResponse.ok("RealName:" + realname);
     }
 
     @Operation(summary = "設定真實姓名")
-    @PostMapping("SetRealName")
+    @PostMapping("/SetRealName")
     public ApiResponse<Object> setRealName(@AuthenticationPrincipal OAuth2User user,
                                            @RequestParam String realName) {
         if (user == null) {
@@ -86,5 +72,4 @@ public class AuthController extends AuthBaseController{
 
         return ApiResponse.ok("真實姓名已成功設定");
     }
-
 }
