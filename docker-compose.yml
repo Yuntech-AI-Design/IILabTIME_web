@@ -36,7 +36,7 @@ services:
     depends_on:
       - postgres-db
     volumes:
-      - /var/lib/IILabTime
+      - /var/lib/IILabTime:/app/uploads
 
 
 volumes:
