@@ -37,12 +37,15 @@ jobs:
           echo "DB_NAME=IILabTime" >> backend/.env
           echo "DB_USER=admin" >> backend/.env
           echo "DB_PASSWORD=1234" >> backend/.env
+          echo "LOGIN_PATH=http://localhost:8080/loginSuccess" >> backend/.env
 
       - name: Zip deploy files
         run: |
           mkdir -p deploy/backend
           cp app/app.jar deploy/backend/
+          dos2unix backend/.env
           cp backend/.env deploy/backend/
+          dos2unix backend/setup.sh
           cp backend/setup.sh deploy/backend/
           cp Dockerfile deploy/
           cp docker-compose.yml deploy/
