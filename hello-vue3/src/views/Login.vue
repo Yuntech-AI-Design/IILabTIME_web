@@ -89,105 +89,13 @@
   </div>
 </template>
 
-<script>
-import { ref, computed, onMounted } from "vue";
-import { useStore } from "vuex";
-import { useRouter, useRoute } from "vue-router";
+<script setup name="LoginPage">
 
-export default {
-  name: "LoginPage",
-  setup() {
-    const store = useStore();
-    const router = useRouter();
-    const route = useRoute();
-
-    const showTermsModal = ref(false);
-    const showPrivacyModal = ref(false);
-
-    const loading = computed(() => store.getters["isLoading"]);
-    const error = computed(() => store.getters["getError"]);
-
-    onMounted(() => {
-      loadGoogleAPI();
-    });
-
-    const loadGoogleAPI = () => {
-      const script = document.createElement("script");
-      script.src = "https://accounts.google.com/gsi/client";
-      script.async = true;
-      script.defer = true;
-      document.head.appendChild(script);
-      script.onload = initGoogleButton;
-    };
-
-    const initGoogleButton = () => {
-      window.google?.accounts.id.initialize({
-        client_id:
-          "582345753246-7t608asp5rp7dvcmfk4fv6b06p8g7gt7.apps.googleusercontent.com",
-        callback: handleGoogleCallback,
-      });
-    };
-
-    const handleGoogleCallback = async (response) => {
-      try {
-        await store.dispatch("auth/googleLogin", response.credential);
-        const redirectPath = route.query.redirect || "/dashboard";
-        router.push(redirectPath);
-      } catch (error) {
-        console.error("Google 登入失敗:", error);
-      }
-    };
-
-    const handleGoogleLogin = () => {
-      const googleConfig = {
-        client_id:
-          "582345753246-7t608asp5rp7dvcmfk4fv6b06p8g7gt7.apps.googleusercontent.com",
-        scope: "email profile",
-        prompt: "select_account",
-      };
-
-      window.open(
-        `https://accounts.google.com/o/oauth2/auth?client_id=${
-          googleConfig.client_id
-        }&redirect_uri=${encodeURIComponent(
-          window.location.origin + "/auth/google/callback"
-        )}&response_type=code&scope=${googleConfig.scope}&prompt=${
-          googleConfig.prompt
-        }`,
-        "google-login",
-        "width=500,height=600"
-      );
-    };
-
-    const showTerms = () => {
-      showTermsModal.value = true;
-    };
-
-    const showPrivacy = () => {
-      showPrivacyModal.value = true;
-    };
-
-    const closeTerms = () => {
-      showTermsModal.value = false;
-    };
-
-    const closePrivacy = () => {
-      showPrivacyModal.value = false;
-    };
-
-    return {
-      loading,
-      error,
-      handleGoogleLogin,
-      showTerms,
-      showPrivacy,
-      closeTerms,
-      closePrivacy,
-      showTermsModal,
-      showPrivacyModal,
-    };
-  },
+const handleGoogleLogin = () => {
+  console.log(process.env.VUE_APP_API_URL + '/oauth2/authorization/google');
+  window.location.href = process.env.VUE_APP_API_URL + "/oauth2/authorization/google";
 };
+
 </script>
 
 <style scoped>
