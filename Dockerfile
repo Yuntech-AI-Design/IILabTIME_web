@@ -1,15 +1,21 @@
 FROM eclipse-temurin:21-jdk
 WORKDIR /app
 
-RUN apt-get update && apt-get install -y dos2unix
+# 安裝 dos2unix 並清理 apt cache
+RUN apt-get update \
+ && apt-get install -y dos2unix \
+ && rm -rf /var/lib/apt/lists/*
 
-COPY backend/app.jar app.jar
-COPY backend/.env .env
-COPY backend/setup.sh setup.sh
+# 複製應用程式目錄與啟動腳本
+COPY backend ./backend
+COPY run.sh ./run.sh
 
-RUN dos2unix setup.sh .env
+# 轉換換行並賦予執行權限
+RUN dos2unix run.sh backend/.env \
+ && chmod +x run.sh
 
-RUN chmod +x setup.sh
+# 開放 8888 埠
+EXPOSE 8888
 
-# 使用 ENTRYPOINT 執行腳本與 JAR
-ENTRYPOINT [ "sh", "-c", ". ./setup.sh && exec java -jar app.jar" ]
+# 執行上層的 run.sh
+ENTRYPOINT ["sh", "-c", "./run.sh"]
