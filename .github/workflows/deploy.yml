@@ -41,6 +41,7 @@ jobs:
 
       - name: Zip deploy files
         run: |
+          sudo apt-get update && sudo apt-get install -y dos2unix
           mkdir -p deploy/backend
           cp app/app.jar deploy/backend/
           dos2unix backend/.env
