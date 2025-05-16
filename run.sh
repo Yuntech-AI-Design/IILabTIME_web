@@ -8,7 +8,7 @@ ENV_PATH="backend/.env"
 echo "啟動中 (Profile=$PROFILE)..."
 
 # 啟動 PostgreSQL
-sudo docker compose up -d postgres-db
+docker compose up -d postgres-db
 
 dos2unix $ENV_PATH
 
