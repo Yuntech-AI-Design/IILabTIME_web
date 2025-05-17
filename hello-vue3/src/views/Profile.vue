@@ -21,13 +21,17 @@
 
         <!-- 右欄：實習單位資料卡片 -->
         <div class="animate-slide-in-right">
-          <InternshipCard :internship="internship" />
+          <InternshipCard
+            :internship="internship"
+            @update:internship="updateInternship"
+            @show-success="showSuccessMessage"
+          />
         </div>
       </div>
     </div>
 
     <!-- 成功提示 -->
-    <SuccessToast :show="showSuccess" message="個人資料已成功更新！" />
+    <SuccessToast :show="showSuccess" message="資料已成功更新！" />
   </section>
 </template>
 
@@ -64,6 +68,10 @@ const showSuccess = ref(false);
 
 const updateProfile = (newProfile) => {
   Object.assign(profile, newProfile);
+};
+
+const updateInternship = (newInternship) => {
+  Object.assign(internship, newInternship);
 };
 
 const showSuccessMessage = () => {
