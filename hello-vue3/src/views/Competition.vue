@@ -1,230 +1,175 @@
 <template>
-  <div class="container mx-auto px-4 py-8 min-h-screen bg-gray-100">
-    <h1 class="text-3xl font-bold text-gray-800 mb-6">參與競賽回報</h1>
-
-    <!-- 回報表單 -->
-    <div class="bg-white shadow-md rounded-lg p-6 mb-6">
-      <form @submit.prevent="submitReport" class="space-y-6">
-        <!-- 競賽名稱 -->
-        <div>
-          <label class="block text-sm font-medium text-gray-600 mb-1">競賽名稱</label>
-          <input
-            v-model="form.competitionName"
-            type="text"
-            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
-            placeholder="例如：2025全國論文競賽"
-            required
+  <section class="w-full px-4 py-6">
+    <!-- 居中容器，增加寬度 -->
+    <div class="max-w-5xl mx-auto">
+      <!-- 標題 -->
+      <h2 class="text-xl font-semibold text-stone-950 mb-4 flex items-center">
+        <svg class="w-6 h-6 mr-2 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+        </svg>
+        競賽提報系統
+      </h2>
+      <!-- 學期選擇 -->
+      <div class="mb-6">
+        <label class="block text-sm font-medium text-stone-700 mb-1">選擇學期</label>
+        <select
+          v-model="selectedSemester"
+          class="w-full px-3 py-2 border border-stone-300 rounded-lg"
+        >
+          <option value="113-1">113學年第一學期</option>
+          <option value="113-2">113學年第二學期</option>
+        </select>
+      </div>
+      <!-- 後備內容 -->
+      <div v-if="!userProfile.internshipCompany" class="text-red-500">
+        無法載入實習廠商資料，請檢查個人資料設定！
+      </div>
+      <!-- 兩欄佈局，調整右欄寬度 -->
+      <div v-else class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- 左欄：競賽表單 -->
+        <div class="bg-white border-4 border-stone-950 rounded-xl p-6 shadow-xl lg:col-span-1">
+          <CompetitionForm
+            v-model="formData"
+            :semester="selectedSemester"
           />
         </div>
-
-        <!-- 參與級別 -->
-        <div>
-          <label class="block text-sm font-medium text-gray-600 mb-1">參與競賽區域類型</label>
-          <select
-            v-model="form.type"
-            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
-            required
-          >
-            <option value="" disabled>請選擇</option>
-            <option value="paper">國際性</option>
-            <option value="seminar">全國性</option>
-            <option value="seminar">區域性</option>
-            <option value="seminar">全校性</option>
-          </select>
-        </div>
-        
-        <!-- 參與類型 -->
-        <div>
-          <label class="block text-sm font-medium text-gray-600 mb-1">參與類型</label>
-          <select
-            v-model="form.type"
-            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
-            required
-          >
-            <option value="" disabled>請選擇</option>
-            <option value="paper">競賽參與</option>
-            <option value="seminar">研討會參與</option>
-            <option value="seminar">論文發表</option>
-          </select>
-        </div>
-
-        <!-- 日期 -->
-        <div>
-          <label class="block text-sm font-medium text-gray-600 mb-1">活動日期</label>
-          <input
-            v-model="form.date"
-            type="date"
-            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
-            required
+        <!-- 右欄：參賽者與文件上傳 -->
+        <div class="bg-white border-4 border-stone-950 rounded-xl p-6 shadow-xl lg:col-span-2">
+          <Participants
+            v-model="formData.participants"
+            :default-participant="defaultParticipant"
           />
-        </div>
-
-        <!-- 說明 -->
-        <div>
-          <label class="block text-sm font-medium text-gray-600 mb-1">參與說明</label>
-          <textarea
-            v-model="form.description"
-            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
-            rows="4"
-            placeholder="請簡述您的參與內容或成果"
-            required
-          ></textarea>
-        </div>
-
-        <!-- 檔案上傳 -->
-        <div>
-          <label class="block text-sm font-medium text-gray-600 mb-1">相關證明檔案</label>
-          <div
-            class="w-full p-6 border-2 border-dashed border-gray-300 rounded-lg text-center hover:border-indigo-500 transition-all duration-300"
-            @dragover.prevent
-            @drop.prevent="handleDrop"
-          >
-            <input
-              type="file"
-              ref="fileInput"
-              @change="handleFileChange"
-              multiple
-              accept=".pdf,.doc,.docx,.jpg,.png"
-              class="hidden"
-            />
-            <p class="text-gray-500">拖曳檔案至此，或</p>
-            <button
-              type="button"
-              @click="$refs.fileInput.click()"
-              class="mt-2 px-4 py-2 bg-indigo-600 text-white rounded-full font-semibold hover:bg-indigo-700 transition-all duration-300"
-            >
-              選擇檔案
-            </button>
-            <p v-if="files.length" class="mt-2 text-sm text-gray-600">
-              已選擇 {{ files.length }} 個檔案
-            </p>
-            <ul v-if="files.length" class="mt-2 text-left text-sm text-gray-700">
-              <li v-for="(file, index) in files" :key="index" class="flex items-center justify-between">
-                {{ file.name }}
-                <button
-                  @click="removeFile(index)"
-                  class="text-red-500 hover:text-red-700"
-                >
-                  移除
-                </button>
-              </li>
-            </ul>
-          </div>
-        </div>
-
-        <!-- 提交按鈕 -->
-        <div class="flex space-x-4">
+          <Supervisors v-model="formData.supervisors" />
+          <FileUploader v-model="formData.proofDocuments" />
           <button
-            type="submit"
-            class="px-6 py-2 bg-green-600 text-white rounded-full font-semibold hover:bg-green-700 transition-all duration-300"
-            :disabled="isSubmitting"
+            @click="handleSubmit"
+            class="mt-4 w-full px-4 py-2 bg-green-500 text-white rounded-full font-semibold shadow-lg hover:bg-yellow-500 hover:text-stone-950 transition-all duration-300 flex items-center justify-center"
           >
-            {{ isSubmitting ? '提交中...' : '提交回報' }}
-          </button>
-          <button
-            type="button"
-            @click="resetForm"
-            class="px-6 py-2 bg-gray-300 text-gray-800 rounded-full font-semibold hover:bg-gray-400 transition-all duration-300"
-          >
-            重置
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path>
+            </svg>
+            提交競賽提報
           </button>
         </div>
-      </form>
+      </div>
     </div>
 
-    <!-- 成功訊息提示 -->
-    <div
-      v-if="showSuccess"
-      class="fixed bottom-4 right-4 bg-green-100 border border-green-300 text-green-800 p-4 rounded-lg shadow-md"
-    >
-      回報已成功提交！
+    <!-- 簡單錯誤提示 -->
+    <div v-if="showErrorModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50">
+      <div class="bg-white rounded-lg p-6 border-4 border-stone-950 shadow-xl max-w-sm w-11/12">
+        <h3 class="text-lg font-semibold text-stone-950 mb-4">{{ errorMessage }}</h3>
+        <button
+          @click="showErrorModal = false"
+          class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-yellow-500 hover:text-stone-950"
+        >
+          確定
+        </button>
+      </div>
     </div>
-  </div>
+  </section>
 </template>
 
-<script>
-import { ref, reactive } from 'vue'
+<script setup>
+import { ref, onMounted } from 'vue';
+import CompetitionForm from '@/components/Competition/CompetitionForm.vue';
+import Participants from '@/components/Competition/Participants.vue';
+import Supervisors from '@/components/Competition/Supervisors.vue';
+import FileUploader from '@/components/Competition/FileUploader.vue';
 
-export default {
-  name: 'CompetitionReportPage',
-  setup() {
-    // 表單資料
-    const form = reactive({
-      competitionName: '',
-      type: '',
-      date: '',
-      description: ''
-    })
+// 模擬個人資料（導入公司）
+const userProfile = {
+  internshipCompany: 'Tech Innovate Inc.'
+};
 
-    // 檔案管理
-    const files = ref([])
-    const fileInput = ref(null)
-    const isSubmitting = ref(false)
-    const showSuccess = ref(false)
+// 預設參賽者（模擬申請者）
+const defaultParticipant = {
+  studentId: 'B11323222',
+  department: '資訊管理系',
+  name: '劉政廷'
+};
 
-    // 處理檔案選擇
-    const handleFileChange = (event) => {
-      const selectedFiles = Array.from(event.target.files)
-      files.value = [...files.value, ...selectedFiles]
-    }
+// 學期選擇
+const selectedSemester = ref('2025-1');
 
-    // 處理拖曳上傳
-    const handleDrop = (event) => {
-      const droppedFiles = Array.from(event.dataTransfer.files)
-      files.value = [...files.value, ...droppedFiles]
-    }
+// 表單數據
+const formData = ref({
+  competitionType: '',
+  awardRank: '',
+  competitionName: '',
+  competitionNature: '個人獎項',
+  participationLevel: '',
+  supervisors: [],
+  participants: [defaultParticipant],
+  projectName: '',
+  totalEntries: '',
+  hostOrganization: '',
+  startDate: '',
+  endDate: '',
+  summary: '',
+  proofDocuments: []
+});
 
-    // 移除檔案
-    const removeFile = (index) => {
-      files.value.splice(index, 1)
-    }
+// 錯誤提示狀態
+const showErrorModal = ref(false);
+const errorMessage = ref('');
 
-    // 提交表單
-    const submitReport = () => {
-      if (files.value.length === 0) {
-        alert('請至少上傳一個證明檔案！')
-        return
-      }
+// 確認頁面掛載
+onMounted(() => {
+  console.log('CompetitionReport.vue 已掛載，實習廠商：', userProfile.internshipCompany);
+});
 
-      isSubmitting.value = true
-      // 模擬 API 提交
-      setTimeout(() => {
-        console.log('提交資料:', { ...form, files: files.value })
-        isSubmitting.value = false
-        showSuccess.value = true
-        resetForm()
-        setTimeout(() => {
-          showSuccess.value = false
-        }, 3000) // 3秒後隱藏成功訊息
-      }, 1000) // 模擬 1 秒延遲
-    }
-
-    // 重置表單
-    const resetForm = () => {
-      form.competitionName = ''
-      form.type = ''
-      form.date = ''
-      form.description = ''
-      files.value = []
-      if (fileInput.value) fileInput.value.value = ''
-    }
-
-    return {
-      form,
-      files,
-      fileInput,
-      isSubmitting,
-      showSuccess,
-      handleFileChange,
-      handleDrop,
-      removeFile,
-      submitReport,
-      resetForm
-    }
+// 提交表單
+const handleSubmit = () => {
+  // 驗證必填欄位
+  if (
+    !formData.value.competitionType ||
+    !formData.value.competitionName ||
+    !formData.value.competitionNature ||
+    !formData.value.participationLevel ||
+    !formData.value.supervisors.length ||
+    !formData.value.participants.length ||
+    !formData.value.projectName ||
+    !formData.value.totalEntries ||
+    !formData.value.hostOrganization ||
+    !formData.value.startDate ||
+    !formData.value.endDate ||
+    !formData.value.summary
+  ) {
+    errorMessage.value = '請填寫所有必填欄位！';
+    showErrorModal.value = true;
+    return;
   }
-}
+  // 模擬提交
+  console.log('提交數據：', formData.value);
+  // 清空表單
+  formData.value = {
+    competitionType: '',
+    awardRank: '',
+    competitionName: '',
+    competitionNature: '個人獎項',
+    participationLevel: '',
+    supervisors: [],
+    participants: [defaultParticipant],
+    projectName: '',
+    totalEntries: '',
+    hostOrganization: '',
+    startDate: '',
+    endDate: '',
+    summary: '',
+    proofDocuments: []
+  };
+  // 顯示成功提示
+  errorMessage.value = '競賽提報提交成功！';
+  showErrorModal.value = true;
+};
 </script>
 
 <style scoped>
-/* Tailwind 已處理大部分樣式，這裡可保留特定自定義樣式 */
+.home-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.home-card:hover {
+  transform: scale(1.02);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+}
 </style>

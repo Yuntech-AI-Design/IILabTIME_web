@@ -8,14 +8,13 @@ import Login from '../views/Login.vue'
 // 懶加載其他頁面
 const Dashboard = () => import('../views/Dashboard.vue')
 const GradeManagement = () => import('../views/GradeManagement.vue')
-const InternshipSupervision = () => import('../views/InternshipSupervision.vue')
 const CheckIn = () => import('../views/CheckIn.vue')
 const Competition = () => import('../views/Competition.vue')
 const Reports = () => import('../views/Reports.vue')
-const Forum = () => import('../views/Forum.vue')
-const QA = () => import('../views/QA.vue')
+const DiscussionForm = () => import('../views/DiscussionForm.vue')
 const Profile = () => import('../views/Profile.vue')
 const IntershipForm = () => import('../views/IntershipForm.vue')
+const IntershipReport = () => import('../views/InternshipReport.vue')
 
 const routes = [
   {
@@ -42,12 +41,6 @@ const routes = [
     meta: { requiresAuth: false }
   },
   {
-    path: '/supervision',
-    name: 'InternshipSupervision',
-    component: InternshipSupervision,
-    meta: { requiresAuth: false, adminOnly: false }
-  },
-  {
     path: '/check-in',
     name: 'CheckIn',
     component: CheckIn,
@@ -66,16 +59,10 @@ const routes = [
     meta: { requiresAuth: false }
   },
   {
-    path: '/forum',
-    name: 'Forum',
-    component: Forum,
+    path: '/discussion',
+    name: 'Discussion',
+    component: DiscussionForm,
     meta: { requiresAuth: false}
-  },
-  {
-    path: '/qa',
-    name: 'QA',
-    component: QA,
-    meta: { requiresAuth: false }
   },
   {
     path: '/profile',
@@ -91,6 +78,12 @@ const routes = [
     path: '/intershipform',
     name: 'intershipform',
     component: IntershipForm,
+    meta: { requiresAuth: false }
+  },
+  {
+    path: '/intershipreport',
+    name: 'intershipreport',
+    component: IntershipReport,
     meta: { requiresAuth: false }
   }
 ]

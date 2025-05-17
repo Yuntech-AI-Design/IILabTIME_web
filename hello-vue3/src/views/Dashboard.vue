@@ -270,9 +270,9 @@ const progressCharts = computed(() => [
 // Quick actions data
 const quickActions = [
   { to: "/check-in", text: "實習打卡", icon: CheckCircleIcon },
-  { to: "/grade", text: "成績管理", icon: CheckCircleIcon },
+  { to: "/grades", text: "成績管理", icon: CheckCircleIcon },
   { to: "/reports", text: "匯出週誌", icon: DocumentArrowDownIcon },
-  { to: "/forum", text: "進入討論區", icon: ChatBubbleLeftIcon },
+  { to: "/discussion", text: "進入討論區", icon: ChatBubbleLeftIcon },
   // { to: "/qa", text: "提問問題", icon: QuestionMarkCircleIcon },
 ];
 
