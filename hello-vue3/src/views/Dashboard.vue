@@ -24,10 +24,11 @@
 
     <!-- 主要內容 -->
     <section class="w-full px-[10%] py-12 relative" ref="mainContentRef">
-      <div class="ball-background absolute top-0 left-0 w-full h-full overflow-x-clip z-0 opacity-60">
+      <div class="ball-background absolute top-0 left-0 w-full h-full overflow-x-clip z-0">
+        <span v-for="(ball, i) in balls" :key="i" class="z-10 absolute rounded-full"
+              :class="[ball.bg, ball.animation]" :style="ball.style"></span>
         <!-- <span class="z-0 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-full bg-Ghibli-yellow h-[672px] w-[672px]"
               :class="{ 'animate-pulse-slow-absolute': mainContentVisible }"></span> -->
-        <BallBackground :random="true" :randomColor="true"/>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-12 gap-8 z-20 relative">
@@ -104,7 +105,7 @@
             </h5>
             <div class="grid gap-4">
               <router-link v-for="(action, index) in quickActions" :key="index" :to="action.to"
-                           class="flex items-center px-6 py-3 rounded-lg shadow-lg hover:scale-105 transition-all duration-300 opacity-0"
+                           class="flex items-center px-6 py-3 bg-Ghibli-blue text-white rounded-lg hover:scale-105 transition-all duration-300 opacity-0"
                            :class="{ 'animate-fade-in-right': mainContentVisible }"
                            :style="`animation-delay: ${0.3 + index * 0.2}s`">
                 <component :is="action.icon" class="w-6 h-6 mr-3" />
@@ -199,7 +200,6 @@ import {
   CalendarIcon,
   TrophyIcon,
 } from "@heroicons/vue/24/outline";
-import BallBackground from "@/components/Background/BallBackground.vue";
 
 // Register Chart.js components
 ChartJS.register(ArcElement, Tooltip, Legend, BarElement, CategoryScale, LinearScale);
@@ -220,6 +220,26 @@ const notificationVisible = ref(true); // Notification is visible by default
 const mainContentVisible = ref(false);
 const mainContentRef = ref(null);
 
+// Animated balls data (same as Home.vue)
+const balls = [
+  { bg: 'bg-Ghibli-blue', animation: 'animate-float', style: 'top: 69%; left: 32%; height: 211px; width: 211px;' },
+  { bg: 'bg-Ghibli-red', animation: 'animate-float-delay-1', style: 'top: 63%; left: 55%; height: 124px; width: 124px;' },
+  { bg: 'bg-Ghibli-light-red', animation: 'animate-float-delay-2', style: 'top: 46%; left: 67.7%; height: 85px; width: 85px;' },
+  { bg: 'bg-Ghibli-skin', animation: 'animate-float-delay-3', style: 'top: 16%; left: 63%; height: 85px; width: 85px;' },
+  { bg: 'bg-Ghibli-green', animation: 'animate-float-delay-4', style: 'top: 0%; left: 0%; height: 323px; width: 323px;' },
+  { bg: 'bg-Ghibli-brown', animation: 'animate-float-delay-1', style: 'top: -5%; left: 32%; height: 158px; width: 158px;' },
+  { bg: 'bg-Ghibli-blue', animation: 'animate-float-delay-2', style: 'top: -7%; left: 70%; height: 132px; width: 132px;' },
+  { bg: 'bg-Ghibli-brown', animation: 'animate-float-delay-3', style: 'top: 50%; left: 85%; height: 532px; width: 532px;' }
+];
+
+// randomize ball positions
+for (let i = 0; i < balls.length; i++) {
+  const randomTop = Math.random() * 100;
+  const randomLeft = Math.random() * 100;
+  console.log(randomTop, randomLeft);
+  const randomSize = Math.random() * 200 + 50; // Random size between 50px and 250px
+  balls[i].style = `top: ${randomTop}%; left: ${randomLeft}%; height: ${randomSize}px; width: ${randomSize}px;`;
+}
 
 // Progress items data
 const progressItems = [
@@ -234,7 +254,7 @@ const weeklyProgressData = computed(() => ({
   datasets: [
     {
       data: [weeklyProgress.value || 0, 100 - (weeklyProgress.value || 0)],
-      backgroundColor: ["#64544C", "#E5E7EB"],
+      backgroundColor: ["#6C96A3", "#E5E7EB"],
       borderWidth: 0,
     },
   ],
@@ -245,7 +265,7 @@ const totalProgressData = computed(() => ({
   datasets: [
     {
       data: [totalProgress.value || 0, 100 - (totalProgress.value || 0)],
-      backgroundColor: ["#E4B584", "#E5E7EB"],
+      backgroundColor: ["#10B981", "#E5E7EB"],
       borderWidth: 0,
     },
   ],
