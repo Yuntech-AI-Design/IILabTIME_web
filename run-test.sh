@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # 設定變數
-PROFILE="local"
+PROFILE="test"
 JAR_PATH="backend/app.jar"
 ENV_PATH="backend/.env"
 
