@@ -114,10 +114,12 @@ const HandleToggleMenu = () => {
   store.dispatch("HandleMenuState", !menuState.value); // Dispatch the action to toggle the menu state
 };
 const routerList = reactive([
-  { key: 1, name: "首頁", path: "/" },
-  { key: 2, name: "管理系統", path: "/dashboard" },
-  { key: 3, name: "實習打卡", path: "/check-in" },
-  { key: 4, name: "個人資料", path: "/profile" },
+  { key: 1, name: '首頁', path: '/' },
+  { key: 2, name: '管理系統', path: '/dashboard' },
+  { key: 3, name: '實習打卡', path: '/check-in' },
+  { key: 4, name: '個人資料', path: '/profile' },
+  { key: 5, name: '實習成績', path: '/grades' },
+  { key: 6, name: '週誌上傳', path: '/reports' }
   // { key: 5, name: "實習資料填寫", path: "/intershipform" },
 ]);
 </script>
