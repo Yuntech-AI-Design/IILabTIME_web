@@ -37,15 +37,21 @@ jobs:
           echo "DB_NAME=IILabTime" >> backend/.env
           echo "DB_USER=admin" >> backend/.env
           echo "DB_PASSWORD=1234" >> backend/.env
+          echo "LOGIN_PATH=http://localhost:8080/loginSuccess" >> backend/.env
 
       - name: Zip deploy files
         run: |
+          sudo apt-get update && sudo apt-get install -y dos2unix
           mkdir -p deploy/backend
           cp app/app.jar deploy/backend/
+          dos2unix backend/.env
           cp backend/.env deploy/backend/
+          dos2unix backend/setup.sh
           cp backend/setup.sh deploy/backend/
           cp Dockerfile deploy/
           cp docker-compose.yml deploy/
+          dos2unix run.sh
+          cp run.sh deploy/
           cd deploy
           zip -r ../deploy.zip .
 
@@ -71,19 +77,8 @@ jobs:
             rm -rf app_deploy
             unzip -o deploy.zip -d app_deploy
             cd app_deploy
+            echo "🔄 執行自訂 run.sh 開始啟動應用程式"
+            chmod +x run.sh
+            dos2unix run.sh
+            ./run.sh
 
-            
-            if [ "$(docker ps -q -f name=app_deploy_postgres-db_1)" = "" ]; then
-              echo "🔧 啟動 postgres-db..."
-              docker compose up -d postgres-db
-            else
-              echo "✅ postgres-db 已在運行中"
-            fi
-
-            
-            echo "⌛ 等待 PostgreSQL 起來..."
-            until docker exec $(docker ps -qf "name=postgres-db") pg_isready > /dev/null 2>&1; do sleep 1; done
-            echo "✅ PostgreSQL 就緒"
-
-            # 🔄 重建 App 容器
-            docker compose up -d --build spring-app

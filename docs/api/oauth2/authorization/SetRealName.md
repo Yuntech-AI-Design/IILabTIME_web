@@ -4,7 +4,7 @@
 google登入後如果沒有真名要用
 ```
 - method: post
-- path: oauth2/authorization/SetRealName
+- path: /SetRealName
 ## 送出
 #### 數入參數
 ```

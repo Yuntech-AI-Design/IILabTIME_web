@@ -35,6 +35,9 @@ services:
       - "8888:8888"
     depends_on:
       - postgres-db
+    volumes:
+      - /var/lib/IILabTime:/app/uploads
+
 
 volumes:
   postgres-db-data:

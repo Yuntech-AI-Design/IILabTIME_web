@@ -4,7 +4,7 @@
 google登入
 ```
 - method: get
-- path: oauth2/authorization/google
+- path: /Google-Login
 ## 回傳
 #### 數據格式
 ```
