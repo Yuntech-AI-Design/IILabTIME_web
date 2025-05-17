@@ -102,6 +102,7 @@ const routerList = reactive([
   { key: 5, name: '實習成績', path: '/grades' },
   { key: 6, name: '週誌上傳', path: '/reports' },
   { key: 7, name: '競賽上傳', path: '/competition' },
-  { key: 8, name: '討論區', path: '/discussion' }
+  { key: 8, name: '討論區', path: '/discussion' },
+  { key: 9, name: '實習成果報告', path: '/intershipreport' }
 ]);
 </script>
