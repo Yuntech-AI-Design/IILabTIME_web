@@ -12,7 +12,7 @@ const InternshipSupervision = () => import('../views/InternshipSupervision.vue')
 const CheckIn = () => import('../views/CheckIn.vue')
 const Competition = () => import('../views/Competition.vue')
 const Reports = () => import('../views/Reports.vue')
-const Forum = () => import('../views/Forum.vue')
+const DiscussionForm = () => import('../views/DiscussionForm.vue')
 const QA = () => import('../views/QA.vue')
 const Profile = () => import('../views/Profile.vue')
 const IntershipForm = () => import('../views/IntershipForm.vue')
@@ -66,9 +66,9 @@ const routes = [
     meta: { requiresAuth: false }
   },
   {
-    path: '/forum',
-    name: 'Forum',
-    component: Forum,
+    path: '/discussion',
+    name: 'Discussion',
+    component: DiscussionForm,
     meta: { requiresAuth: false}
   },
   {
