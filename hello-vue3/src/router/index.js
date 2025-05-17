@@ -4,6 +4,7 @@ import store from '../store'
 // 首頁和身份驗證相關頁面
 import Home from '../views/Home.vue'
 import Login from '../views/Login.vue'
+import LoginSuccess from '../views/LoginSuccess.vue'
 
 // 懶加載其他頁面
 const Dashboard = () => import('../views/Dashboard.vue')
@@ -27,6 +28,11 @@ const routes = [
     name: 'Login',
     component: Login,
     meta: { guestOnly: true }
+  },
+  {
+    path: '/loginSuccess',
+    name: 'LoginSuccess',
+    component: LoginSuccess
   },
   {
     path: '/dashboard',

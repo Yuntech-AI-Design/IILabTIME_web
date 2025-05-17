@@ -14,6 +14,12 @@
       @check-in="checkIn"
       @check-out="checkOut"
     />
+    <UploadWeek
+      :is-upload-week="isUploadWeek"
+      :last-upload-week="lastUploadWeek"
+      :last-upload-week-timestamp="lastUploadWeekTimestamp"
+      @check-out="checkOut"
+    />
     <StatsGrid
       :weekly-hours="weeklyHours"
       :monthly-check-ins="monthlyCheckIns"
@@ -40,6 +46,7 @@ import StatusCard from '@/components/CheckIn/StatusCard.vue'
 import StatsGrid from '@/components/CheckIn/StatsGrid.vue'
 import HistoryTable from '@/components/CheckIn/HistoryTable.vue'
 import ModalDialog from '@/components/CheckIn/ModalDialog.vue'
+import UploadWeek from '@/components/CheckIn/UploadWeek.vue'
 
 // 動畫與狀態
 const headerVisible = ref(true)
@@ -53,6 +60,10 @@ const checkInRecords = ref([])
 const showModal = ref(false)
 const modalMessage = ref('')
 const pendingAction = ref(null)
+const isUploadWeek =  ref(false)
+const lastUploadWeek = ref('')
+const lastUploadWeekTimestamp = ref(null)
+
 
 const getCurrentTime = () => new Date().toLocaleTimeString('zh-TW', { hour: '2-digit', minute: '2-digit', hour12: false })
 const getCurrentDate = () => {
@@ -83,6 +94,7 @@ const checkOut = () => {
     showModal.value = true
   }
 }
+
 
 const confirmAction = () => {
   if (pendingAction.value === 'checkIn') {

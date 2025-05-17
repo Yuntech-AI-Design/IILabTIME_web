@@ -1,5 +1,5 @@
 <template>
-  <section class="w-full h-[20vh] pt-[8vh] px-[5%] relative z-10">
+  <section class="w-full h-[20vh] px-[5%] relative z-10">
     <div class="flex flex-col items-center justify-center w-full h-full">
       <h1
         class="text-5xl font-bold flex items-center justify-center opacity-0"
