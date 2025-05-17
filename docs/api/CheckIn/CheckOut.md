@@ -9,14 +9,12 @@ CheckOut紀錄CheckOut的時間
 #### 數入參數
 ```
     {
-        timestamp: timestamp
         note: string     
     }
 ```
 #### 說明
 ```
     {
-        timestamp: 時間
         note: 筆記
     }
 ```
@@ -28,7 +26,7 @@ CheckOut紀錄CheckOut的時間
     status: 200/300/400
     message: String
     data: {
-        duration: int
+        duration: Long
     }
     timestamp: TimeStamp
 

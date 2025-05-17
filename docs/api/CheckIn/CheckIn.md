@@ -9,14 +9,12 @@ CheckIn紀錄CheckIn的時間
 #### 數入參數
 ```
     {
-        timestamp: timestamp
         note: string     
     }
 ```
 #### 說明
 ```
     {
-        timestamp: 時間
         note: 筆記
     }
 ```

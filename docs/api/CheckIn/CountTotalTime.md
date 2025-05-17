@@ -1,10 +1,10 @@
-# CountCheckIn
+# CountTotalTime
 ## 說明內容
 ```
-累計一學期總共打卡次數
+累計一學期總共打卡時數
 ```
 - method: get
-- path:  CheckIn/CountCheckIn
+- path:  CheckIn/CountTotalTime
 ## 回傳
 #### 數據格式
 ```
@@ -12,7 +12,7 @@
     status: 200/300/400
     message: String
     data: {
-        CountCheckIn: Int
+        CountTotalTime: Float
     }
     timestamp: TimeStamp
 }
@@ -23,7 +23,7 @@
     status: 200/300/400
     message: 正確錯誤訊息
     data: {
-        CountCheckIn: 總共打卡次數
+        CountTotalTime: 總打卡時數
     }
     timestamp: 時間 
 }
