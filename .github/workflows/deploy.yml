@@ -52,6 +52,8 @@ jobs:
           cp docker-compose.yml deploy/
           dos2unix run.sh
           cp run.sh deploy/
+          dos2unix run-test.sh
+          cp run-test.sh deploy/
           cd deploy
           zip -r ../deploy.zip .
 
@@ -78,7 +80,7 @@ jobs:
             unzip -o deploy.zip -d app_deploy
             cd app_deploy
             echo "🔄 執行自訂 run.sh 開始啟動應用程式"
-            chmod +x run.sh
-            dos2unix run.sh
-            ./run.sh
+            chmod +x run-test.sh
+            dos2unix run-test.sh
+            ./run-test.sh
 
