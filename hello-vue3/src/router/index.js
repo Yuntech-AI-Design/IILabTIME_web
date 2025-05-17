@@ -14,6 +14,7 @@ const Reports = () => import('../views/Reports.vue')
 const DiscussionForm = () => import('../views/DiscussionForm.vue')
 const Profile = () => import('../views/Profile.vue')
 const IntershipForm = () => import('../views/IntershipForm.vue')
+const IntershipReport = () => import('../views/InternshipReport.vue')
 
 const routes = [
   {
@@ -77,6 +78,12 @@ const routes = [
     path: '/intershipform',
     name: 'intershipform',
     component: IntershipForm,
+    meta: { requiresAuth: false }
+  },
+  {
+    path: '/intershipreport',
+    name: 'intershipreport',
+    component: IntershipReport,
     meta: { requiresAuth: false }
   }
 ]
