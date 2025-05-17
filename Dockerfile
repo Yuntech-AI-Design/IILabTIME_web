@@ -8,14 +8,14 @@ RUN apt-get update \
 
 # 複製應用程式目錄與啟動腳本
 COPY backend ./backend
-COPY run.sh ./run.sh
+COPY run-test.sh ./run-test.sh
 
 # 轉換換行並賦予執行權限
-RUN dos2unix run.sh backend/.env \
- && chmod +x run.sh
+RUN dos2unix run-test.sh backend/.env \
+ && chmod +x run-test.sh
 
 # 開放 8888 埠
 EXPOSE 8888
 
 # 執行上層的 run.sh
-ENTRYPOINT ["sh", "-c", "./run.sh"]
+ENTRYPOINT ["sh", "-c", "./run-test.sh"]
