@@ -8,12 +8,10 @@ import Login from '../views/Login.vue'
 // 懶加載其他頁面
 const Dashboard = () => import('../views/Dashboard.vue')
 const GradeManagement = () => import('../views/GradeManagement.vue')
-const InternshipSupervision = () => import('../views/InternshipSupervision.vue')
 const CheckIn = () => import('../views/CheckIn.vue')
 const Competition = () => import('../views/Competition.vue')
 const Reports = () => import('../views/Reports.vue')
 const DiscussionForm = () => import('../views/DiscussionForm.vue')
-const QA = () => import('../views/QA.vue')
 const Profile = () => import('../views/Profile.vue')
 const IntershipForm = () => import('../views/IntershipForm.vue')
 
@@ -42,12 +40,6 @@ const routes = [
     meta: { requiresAuth: false }
   },
   {
-    path: '/supervision',
-    name: 'InternshipSupervision',
-    component: InternshipSupervision,
-    meta: { requiresAuth: false, adminOnly: false }
-  },
-  {
     path: '/check-in',
     name: 'CheckIn',
     component: CheckIn,
@@ -70,12 +62,6 @@ const routes = [
     name: 'Discussion',
     component: DiscussionForm,
     meta: { requiresAuth: false}
-  },
-  {
-    path: '/qa',
-    name: 'QA',
-    component: QA,
-    meta: { requiresAuth: false }
   },
   {
     path: '/profile',
