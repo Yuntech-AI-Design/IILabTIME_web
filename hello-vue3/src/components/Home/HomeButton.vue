@@ -6,10 +6,9 @@
             class="flex flex-row items-center justify-between h-full w-full rounded-3xl font-medium text-3xl py-[4%] px-[17%] cursor-pointer"
             v-if="routerLink[0] === '/'" :to="{ path: routerLink }" v-allCharBounce>
             <div class="text-container">
-                <!-- <span v-for="(char, index) in buttonText.split('')" :key="index" class="char inline-block">{{
+                <span v-for="(char, index) in buttonText.split('')" :key="index" class="char inline-block">{{
                     char
-                    }}</span> -->
-                {{ buttonText }}
+                    }}</span>
             </div>
             <font-awesome-icon class="h icon" :icon="buttonIcon" />
         </router-link>
@@ -17,10 +16,9 @@
             class=" flex flex-row items-center justify-between h-full w-full rounded-4xl font-medium text-3xl py-[4%] px-[17%] cursor-pointer"
             v-else @click="ScrollToSection(routerLink.replace('#', ''))">
             <div class="text-container">
-                <!-- <span v-for="(char, index) in buttonText.split('')" :key="index" class="char">{{
+                <span v-for="(char, index) in buttonText.split('')" :key="index" class="char">{{
                     char
-                    }}</span> -->
-                {{ buttonText }}
+                    }}</span>
             </div>
             <font-awesome-icon class="h icon" :icon="buttonIcon" />
         </a>
