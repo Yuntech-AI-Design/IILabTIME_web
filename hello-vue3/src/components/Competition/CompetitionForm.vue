@@ -6,15 +6,15 @@
       <select
         :value="modelValue.competitionType"
         @change="updateField('competitionType', $event.target.value)"
-        class="w-full px-3 py-2 border border-stone-300 rounded-lg"
+        class="w-full max-w-full px-3 py-2 border border-stone-300 rounded-lg box-border"
       >
         <option value="">請選擇競賽類別</option>
-        <option value="國際性">國際性</option>
-        <option value="全國性">全國性</option>
-        <option value="地區性">地區性</option>
+        <option value="國際性">国际性</option>
+        <option value="全國性">全国性</option>
+        <option value="地區性">地区性</option>
         <option value="教育部">教育部</option>
-        <option value="大陸、港、澳地區">大陸、港、澳地區</option>
-        <option value="校內競賽">校內競賽</option>
+        <option value="大陸、港、澳地區">大陆、港、澳地区</option>
+        <option value="校內競賽">校内竞赛</option>
       </select>
       <!-- 競賽類別條件提示 -->
       <div v-if="modelValue.competitionType === '國際性'" class="text-sm text-gray-600 mt-1">
@@ -37,7 +37,7 @@
         :value="modelValue.awardRank"
         @input="updateField('awardRank', $event.target.value)"
         placeholder="請填寫「第X名」或佳作"
-        class="w-full px-3 py-2 border border-stone-300 rounded-lg"
+        class="w-full max-w-full px-3 py-2 border border-stone-300 rounded-lg box-border"
       />
     </div>
 
@@ -49,7 +49,7 @@
         :value="modelValue.competitionName"
         @input="updateField('competitionName', $event.target.value)"
         placeholder="請輸入競賽名稱"
-        class="w-full px-3 py-2 border border-stone-300 rounded-lg"
+        class="w-full max-w-full px-3 py-2 border border-stone-300 rounded-lg box-border"
         required
       />
     </div>
@@ -60,7 +60,7 @@
       <select
         :value="modelValue.competitionNature"
         @change="updateField('competitionNature', $event.target.value)"
-        class="w-full px-3 py-2 border border-stone-300 rounded-lg"
+        class="w-full max-w-full px-3 py-2 border border-stone-300 rounded-lg box-border"
       >
         <option value="個人獎項">個人獎項</option>
         <option value="團體獎項">團體獎項</option>
@@ -73,7 +73,7 @@
       <select
         :value="modelValue.participationLevel"
         @change="updateField('participationLevel', $event.target.value)"
-        class="w-full px-3 py-2 border border-stone-300 rounded-lg"
+        class="w-full max-w-full px-3 py-2 border border-stone-300 rounded-lg box-border"
       >
         <option value="">請選擇參與程度</option>
         <option value="參賽">參賽</option>
@@ -90,7 +90,7 @@
         :value="modelValue.projectName"
         @input="updateField('projectName', $event.target.value)"
         placeholder="請輸入作品名稱或競賽項目"
-        class="w-full px-3 py-2 border border-stone-300 rounded-lg"
+        class="w-full max-w-full px-3 py-2 border border-stone-300 rounded-lg box-border"
         required
       />
     </div>
@@ -103,7 +103,7 @@
         :value="modelValue.totalEntries"
         @input="updateField('totalEntries', $event.target.value)"
         placeholder="共多少競爭對手參賽"
-        class="w-full px-3 py-2 border border-stone-300 rounded-lg"
+        class="w-full max-w-full px-3 py-2 border border-stone-300 rounded-lg box-border"
         required
       />
     </div>
@@ -116,7 +116,7 @@
         :value="modelValue.hostOrganization"
         @input="updateField('hostOrganization', $event.target.value)"
         placeholder="請輸入主辦單位"
-        class="w-full px-3 py-2 border border-stone-300 rounded-lg"
+        class="w-full max-w-full px-3 py-2 border border-stone-300 rounded-lg box-border"
         required
       />
     </div>
@@ -129,7 +129,7 @@
           type="date"
           :value="modelValue.startDate"
           @input="updateField('startDate', $event.target.value)"
-          class="w-full px-3 py-2 border border-stone-300 rounded-lg"
+          class="flex-1 max-w-full px-3 py-2 border border-stone-300 rounded-lg box-border"
           required
         />
         <span>~</span>
@@ -137,7 +137,7 @@
           type="date"
           :value="modelValue.endDate"
           @input="updateField('endDate', $event.target.value)"
-          class="w-full px-3 py-2 border border-stone-300 rounded-lg"
+          class="flex-1 max-w-full px-3 py-2 border border-stone-300 rounded-lg box-border"
           required
         />
       </div>
@@ -150,7 +150,7 @@
         :value="modelValue.summary"
         @input="updateField('summary', $event.target.value)"
         placeholder="請簡要條例說明，文限200字"
-        class="w-full px-3 py-2 border border-stone-300 rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none min-h-[100px]"
+        class="w-full max-w-full px-3 py-2 border border-stone-300 rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none min-h-[100px] box-border"
         maxlength="200"
         required
       ></textarea>
@@ -170,10 +170,9 @@ const props = defineProps({
   }
 });
 
-const emit = defineEmits(['update:modelValue']); // ✅ 修正點在這裡！
+const emit = defineEmits(['update:modelValue']);
 
 const updateField = (field, value) => {
   emit('update:modelValue', { ...props.modelValue, [field]: value });
 };
-
 </script>
