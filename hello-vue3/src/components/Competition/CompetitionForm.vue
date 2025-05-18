@@ -9,12 +9,11 @@
         class="w-full max-w-full px-3 py-2 border border-stone-300 rounded-lg box-border"
       >
         <option value="">請選擇競賽類別</option>
-        <option value="國際性">国际性</option>
-        <option value="全國性">全国性</option>
-        <option value="地區性">地区性</option>
+        <option value="國際性">國際性</option>
+        <option value="全國性">全國性</option>
+        <option value="地區性">地區性</option>
         <option value="教育部">教育部</option>
-        <option value="大陸、港、澳地區">大陆、港、澳地区</option>
-        <option value="校內競賽">校内竞赛</option>
+        <option value="校內競賽">校內競賽</option>
       </select>
       <!-- 競賽類別條件提示 -->
       <div v-if="modelValue.competitionType === '國際性'" class="text-sm text-gray-600 mt-1">
@@ -23,9 +22,6 @@
       </div>
       <div v-if="modelValue.competitionType === '教育部'" class="text-sm text-gray-600 mt-1">
         以教育部名義舉辦之專業技(藝)能競賽。
-      </div>
-      <div v-if="modelValue.competitionType === '大陸、港、澳地區'" class="text-sm text-gray-600 mt-1">
-        大陸、港、澳地區應包含三個以上不同單位參與競賽。
       </div>
     </div>
 
