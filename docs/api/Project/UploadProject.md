@@ -23,7 +23,7 @@
 #### 說明
 ```
     {
-        location: 實習位置,
+        location: 實習位置/廠商,
         content: 實習內容,
         observe_record: 實習觀察記錄,
         reflection: 實習心得與反思,

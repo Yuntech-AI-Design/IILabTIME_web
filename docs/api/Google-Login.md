@@ -1,17 +1,19 @@
-# google
+# Google-Login
 ## 說明內容
 ```
-google登入
+google登入後如果沒有真名要用
 ```
 - method: get
-- path: /oauth2/authorization/google
+- path: /Google-Login
+
 ## 回傳
 #### 數據格式
 ```
 {
     status: 200/300/400
     message: String
-    data: {
+    data:{
+        RealName: String
     }
     timestamp: TimeStamp
 
@@ -22,7 +24,8 @@ google登入
 {
     status: 200/300/400
     message: 正確錯誤訊息
-    data: {
+    data:{
+        RealName: 使用者真實姓名
     }
     timestamp: 時間 
 }
