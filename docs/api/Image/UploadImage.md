@@ -4,7 +4,7 @@
 檔案上傳
 ```
 - method: post
-- path: Project/UploadImage
+- path: Image/UploadImage
 ## 送出
 #### 數入參數
 ```

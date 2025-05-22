@@ -5,8 +5,12 @@
     - 成功
 - 400
     - 失敗
+
+## TimeStamp
+統一格式：yyyy-MM-dd'T'HH:mm:ss
+
 ## 後端 
-- data 回傳
+- data 傳
     - json
 
 ## 前端
