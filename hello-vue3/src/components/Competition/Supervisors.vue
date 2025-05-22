@@ -19,15 +19,9 @@
           :value="supervisor.name"
           @input="updateSupervisor(index, 'name', $event.target.value)"
           placeholder="姓名"
-          class="flex-1 px-3 py-2 border border-stone-300 rounded-lg max-w-[120px]"
+          class="flex-1 px-3 py-2 border border-stone-300 rounded-lg max-w-[150px]"
         />
-        <input
-          type="text"
-          :value="supervisor.title"
-          @input="updateSupervisor(index, 'title', $event.target.value)"
-          placeholder="職稱"
-          class="flex-1 px-3 py-2 border border-stone-300 rounded-lg max-w-[120px]"
-        />
+
         <input
           type="text"
           :value="supervisor.id"

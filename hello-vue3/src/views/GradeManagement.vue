@@ -1,6 +1,5 @@
 <template>
   <section class="w-full px-[10%] py-6 relative z-10">
-    <BallBackground :random="true" :randomColor="true" />
     <div
       class="home-card bg-white border-4 border-stone-950 rounded-xl p-8 shadow-xl opacity-0"
       :class="{ 'animate-fade-in-up-relative': headerVisible }"
@@ -10,22 +9,22 @@
         <AcademicCapIcon class="w-7 h-7 mr-2 text-Ghibli-blue" /> 實習成績記錄
       </h2>
 
-      <!-- 篩選與操作區域 -->
+      <!-- 篩選與操作區 -->
       <div class="flex flex-col md:flex-row gap-4 mb-6">
         <div class="flex-1">
           <label class="block text-sm font-medium text-stone-700 mb-1">搜尋姓名</label>
           <input
-            v-model="searchName"
+            v-model.trim="searchName"
             type="text"
             placeholder="輸入學生姓名"
-            class="w-full px-4 py-2 border border-stone-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-Ghibli-blue"
+            class="w-full px-4 py-2 border border-stone-300 rounded-lg focus:ring-2 focus:ring-Ghibli-blue"
           />
         </div>
         <div class="flex-1">
           <label class="block text-sm font-medium text-stone-700 mb-1">成績範圍</label>
           <select
             v-model="scoreFilter"
-            class="w-full px-4 py-2 border border-stone-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-Ghibli-blue"
+            class="w-full px-4 py-2 border border-stone-300 rounded-lg focus:ring-2 focus:ring-Ghibli-blue"
           >
             <option value="">全部</option>
             <option value="90-100">90-100</option>
@@ -34,251 +33,242 @@
             <option value="below-70">低於 70</option>
           </select>
         </div>
-        <div class="flex space-x-4">
-          <button
-            @click="openEditModal"
-            class="px-6 py-2 bg-Ghibli-blue text-white rounded-full font-semibold shadow-lg hover:bg-Ghibli-yellow hover:text-stone-950 transition-all duration-300 flex items-center"
-          >
-            <PencilIcon class="w-5 h-5 mr-2" /> 編輯成績
+        <div class="flex items-end space-x-4">
+          <button @click="clearFilters" class="px-6 py-2 bg-gray-500 text-white rounded-full font-semibold hover:bg-gray-600 flex items-center">
+            <XIcon class="w-5 h-5 mr-2" /> 清除篩選
           </button>
-          <button
-            @click="exportToCSV"
-            class="px-6 py-2 bg-Ghibli-green text-white rounded-full font-semibold shadow-lg hover:bg-Ghibli-yellow hover:text-stone-950 transition-all duration-300 flex items-center"
-          >
-            <DocumentDownloadIcon class="w-5 h-5 mr-2" /> 導出 CSV
+          <button @click="openBatchEditModal" class="px-6 py-2 bg-Ghibli-blue text-white rounded-full font-semibold hover:bg-Ghibli-yellow flex items-center">
+            <PencilIcon class="w-5 h-5 mr-2" /> 批量編輯
+          </button>
+          <!-- 匯出CSV按鈕 -->
+          <button @click="exportCSV" class="px-6 py-2 bg-green-600 text-white rounded-full font-semibold hover:bg-green-700 flex items-center">
+            <ArrowDownTrayIcon class="w-5 h-5 mr-2" /> 匯出CSV
           </button>
         </div>
       </div>
 
       <!-- 成績表格 -->
-      <div class="overflow-x-auto">
-        <table class="w-full text-left border-collapse" role="grid" aria-label="實習成績與時數記錄">
+      <div class="overflow-x-auto rounded-lg border border-stone-300">
+        <table class="w-full text-left border-collapse" role="grid">
           <thead>
             <tr class="bg-Ghibli-skin text-stone-950">
-              <th class="py-3 px-4 font-semibold" scope="col">姓名</th>
-              <th class="py-3 px-4 font-semibold" scope="col">實習項目</th>
-              <th class="py-3 px-4 font-semibold" scope="col">成績</th>
-              <th class="py-3 px-4 font-semibold" scope="col">評語</th>
-              <th class="py-3 px-4 font-semibold" scope="col">實習時數</th>
+              <th class="py-3 px-4 font-semibold text-sm">姓名</th>
+              <th class="py-3 px-4 font-semibold text-sm">實習項目</th>
+              <th class="py-3 px-4 font-semibold text-sm">成績</th>
+              <th class="py-3 px-4 font-semibold text-sm">評語</th>
+              <th class="py-3 px-4 font-semibold text-sm">實習時數</th>
+              <th class="py-3 px-4 font-semibold text-sm">操作</th>
             </tr>
           </thead>
           <tbody>
             <tr
-              v-for="(record, index) in filteredRecords"
-              :key="index"
-              class="border-b border-stone-300 hover:bg-Ghibli-skin/30"
+              v-for="(r, idx) in filteredRecords"
+              :key="r.id"
+              class="border-b border-stone-200 hover:bg-Ghibli-skin/30"
             >
-              <td class="py-3 px-4">{{ record.name }}</td>
-              <td class="py-3 px-4">{{ record.project }}</td>
-              <td class="py-3 px-4">
-                <span :class="getScoreClass(record.score)">{{ record.score }}</span>
+              <td class="py-3 px-4 text-sm">{{ r.name }}</td>
+              <td class="py-3 px-4 text-sm">{{ r.project }}</td>
+              <td class="py-3 px-4 text-sm">
+                <span :class="getScoreClass(r.score)">{{ r.score }}</span>
               </td>
-              <td class="py-3 px-4">{{ record.comment || '-' }}</td>
-              <td class="py-3 px-4">{{ getStudentHours(record.name) }} 小時</td>
+              <td class="py-3 px-4 text-sm">{{ r.comment || '−' }}</td>
+              <td class="py-3 px-4 text-sm">{{ getHours(r.name) }} 小時</td>
+              <td class="py-3 px-4">
+                <button
+                  @click="openSingleEditModal(r, idx)"
+                  class="px-3 py-1 bg-Ghibli-blue text-white rounded-lg text-sm hover:bg-Ghibli-yellow"
+                >
+                  編輯
+                </button>
+              </td>
             </tr>
             <tr v-if="filteredRecords.length === 0">
-              <td colspan="5" class="py-3 px-4 text-center text-gray-500">暫無成績記錄</td>
+              <td colspan="6" class="py-4 px-4 text-center text-gray-500 text-sm">暫無成績記錄</td>
             </tr>
           </tbody>
         </table>
       </div>
     </div>
 
-    <!-- 批量編輯成績 Modal -->
-    <ModalDialog
-      v-if="showEditModal"
-      message="編輯所有學生成績"
-      pendingAction="edit"
-      @confirm="saveEdits"
-      @cancel="closeEditModal"
-      @close="closeEditModal"
-    >
-      <div class="max-h-96 overflow-y-auto">
-        <div
-          v-for="(record, index) in editRecords"
-          :key="index"
-          class="mb-6 border-b border-stone-300 pb-4"
-        >
-          <h3 class="text-lg font-semibold text-stone-950 mb-2">{{ record.name }} - {{ record.project }}</h3>
-          <div class="mb-2">
-            <label class="block text-sm font-medium text-stone-700 mb-1">成績 (0-100)</label>
-            <input
-              v-model.number="record.score"
-              type="number"
-              min="0"
-              max="100"
-              placeholder="輸入成績"
-              class="w-full px-4 py-2 border border-stone-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-Ghibli-blue"
-              required
-              aria-required="true"
-            />
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-stone-700 mb-1">評語</label>
-            <textarea
-              v-model="record.comment"
-              placeholder="輸入評語（可選）"
-              class="w-full px-4 py-2 border border-stone-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-Ghibli-blue"
-            ></textarea>
+    <!-- 單一編輯 Modal (Teleport 到 body) -->
+    <teleport to="body">
+      <ModalDialog
+        v-if="showSingleEditModal"
+        :visible="showSingleEditModal"
+        :message="`編輯學生 ${editRecord.name} 的成績和評語`"
+        @confirm="saveSingleEdit"
+        @cancel="closeSingleEditModal"
+        @close="closeSingleEditModal"
+      >
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-stone-700 mb-1">成績 (0-100)</label>
+          <input
+            v-model.number="editRecord.score"
+            type="number" min="0" max="100"
+            class="w-full px-4 py-2 border border-stone-300 rounded-lg focus:ring-2 focus:ring-Ghibli-blue"
+            @input="validateSingleScore"
+          />
+          <p v-if="singleError.score" class="text-Ghibli-red text-sm mt-1">{{ singleError.score }}</p>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-stone-700 mb-1">評語 (最多200字)</label>
+          <textarea
+            v-model="editRecord.comment"
+            class="w-full px-4 py-2 border border-stone-300 rounded-lg focus:ring-2 focus:ring-Ghibli-blue resize-none"
+            maxlength="200"
+          ></textarea>
+        </div>
+      </ModalDialog>
+    </teleport>
+
+    <!-- 批量編輯 Modal (Teleport 到 body) -->
+    <teleport to="body">
+      <ModalDialog
+        v-if="showBatchEditModal"
+        :visible="showBatchEditModal"
+        message="批量編輯學生成績和評語"
+        @confirm="saveBatchEdit"
+        @cancel="closeBatchEditModal"
+        @close="closeBatchEditModal"
+      >
+        <div class="max-h-96 overflow-y-auto pr-2">
+          <div
+            v-for="(r, i) in batchEditRecords"
+            :key="r.id"
+            class="mb-6 border-b border-stone-300 pb-4"
+          >
+            <h3 class="text-lg font-semibold text-stone-950 mb-2">{{ r.name }} - {{ r.project }}</h3>
+            <div class="mb-2">
+              <label class="block text-sm font-medium text-stone-700 mb-1">成績 (0-100)</label>
+              <input
+                v-model.number="r.score"
+                type="number" min="0" max="100"
+                class="w-full px-4 py-2 border border-stone-300 rounded-lg focus:ring-2 focus:ring-Ghibli-blue"
+                @input="validateBatchScore(i)"
+              />
+              <p v-if="batchErrors[i]?.score" class="text-Ghibli-red text-sm mt-1">{{ batchErrors[i].score }}</p>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-stone-700 mb-1">評語 (最多200字)</label>
+              <textarea
+                v-model="r.comment"
+                class="w-full px-4 py-2	border border-stone-300 rounded-lg focus:ring-2 focus:ring-Ghibli-blue resize-none"
+                maxlength="200"
+              ></textarea>
+            </div>
           </div>
         </div>
-      </div>
-    </ModalDialog>
-
-    <!-- 導出確認 Modal -->
-    <ModalDialog
-      v-if="showExportModal"
-      message="確定要導出成績數據為 CSV 檔案嗎？"
-      pendingAction="export"
-      @confirm="confirmExport"
-      @cancel="showExportModal = false"
-      @close="showExportModal = false"
-    />
+      </ModalDialog>
+    </teleport>
   </section>
 </template>
 
 <script setup>
 import { ref, computed } from 'vue';
-import { AcademicCapIcon, DocumentDownloadIcon, PencilIcon } from '@heroicons/vue/24/outline';
-import ModalDialog from '@/components/CheckIn/ModalDialog.vue';
-import BallBackground from '@/components/Background/BallBackground.vue';
+import { AcademicCapIcon, PencilIcon, XIcon, ArrowDownTrayIcon } from '@heroicons/vue/24/outline';
+import ModalDialog from '@/components/Grades/ModalDialog.vue';
 
-defineProps({
-  headerVisible: {
-    type: Boolean,
-    default: true
-  }
-});
+defineProps({ headerVisible: { type: Boolean, default: true } });
 
-// 模擬成績數據（實際應用中應從 API 獲取）
+// 資料
 const gradeRecords = ref([
-  { name: '張偉', project: 'AI 模型開發', score: 92, comment: '表現出色，積極參與' },
-  { name: '李娜', project: '數據分析', score: 85, comment: '認真負責，需加強創新' },
-  { name: '王芳', project: '前端開發', score: 78, comment: '穩定進步，細節需改進' },
-  { name: '陳明', project: '後端系統', score: 65, comment: '需更專注於任務' }
+  { id: '1', name: '張偉', project: 'AI 模型開發', score: 92, comment: '表現出色' },
+  { id: '2', name: '李娜', project: '數據分析', score: 85, comment: '需加強創新' },
+  { id: '3', name: '王芳', project: '前端開發', score: 78, comment: '細節需改進' },
+  { id: '4', name: '陳明', project: '後端系統', score: 65, comment: '需更專注' }
 ]);
-
-// 模擬學生實習時數（實際應用中應從 API 獲取，類似 HistoryTable.vue 的 checkInRecords）
 const studentHours = ref([
   { name: '張偉', hours: 120 },
   { name: '李娜', hours: 95 },
   { name: '王芳', hours: 80 },
-  { name: '陳明', hours: 60 },
-  { name: '劉洋', hours: 0 },
-  { name: '趙靜', hours: 0 }
+  { name: '陳明', hours: 60 }
 ]);
 
-// 獲取學生實習時數
-const getStudentHours = (name) => {
-  const student = studentHours.value.find(s => s.name === name);
-  return student ? student.hours : 0;
-};
-
-// 篩選狀態
+// 計算
+const getHours = name => studentHours.value.find(s => s.name === name)?.hours || 0;
 const searchName = ref('');
 const scoreFilter = ref('');
+const clearFilters = () => { searchName.value = ''; scoreFilter.value = ''; };
 
-// 計算過濾後的記錄
-const filteredRecords = computed(() => {
-  return gradeRecords.value.filter(record => {
-    const matchesName = record.name.toLowerCase().includes(searchName.value.toLowerCase());
-    let matchesScore = true;
-
-    if (scoreFilter.value !== '') {
-      if (scoreFilter.value === '90-100') matchesScore = record.score >= 90;
-      else if (scoreFilter.value === '80-89') matchesScore = record.score >= 80 && record.score < 90;
-      else if (scoreFilter.value === '70-79') matchesScore = record.score >= 70 && record.score < 80;
-      else if (scoreFilter.value === 'below-70') matchesScore = record.score < 70;
+const filteredRecords = computed(() =>
+  gradeRecords.value.filter(r => {
+    const byName = r.name.includes(searchName.value.trim());
+    let byScore = true;
+    if (scoreFilter.value) {
+      if (scoreFilter.value === 'below-70') byScore = r.score < 70;
+      else {
+        const [min, max] = scoreFilter.value.split('-').map(Number);
+        byScore = r.score >= min && r.score <= max;
+      }
     }
+    return byName && byScore;
+  })
+);
 
-    return matchesName && matchesScore;
-  });
-});
+const getScoreClass = score =>
+  score >= 90 ? 'text-Ghibli-green font-bold' :
+  score >= 80 ? 'text-Ghibli-blue' :
+  score >= 70 ? 'text-Ghibli-yellow' :
+  'text-Ghibli-red';
 
-// 根據成績返回樣式類
-const getScoreClass = score => {
-  if (score >= 90) return 'text-Ghibli-green font-bold';
-  if (score >= 80) return 'text-Ghibli-blue';
-  if (score >= 70) return 'text-Ghibli-yellow';
-  return 'text-Ghibli-red';
-};
-
-// 批量編輯狀態
-const showEditModal = ref(false);
-const editRecords = ref([]);
-
-const openEditModal = () => {
-  editRecords.value = gradeRecords.value.map(record => ({
-    name: record.name,
-    project: record.project,
-    score: record.score,
-    comment: record.comment
-  }));
-  showEditModal.value = true;
-};
-
-const saveEdits = () => {
-  for (const record of editRecords.value) {
-    if (record.score === null || record.score < 0 || record.score > 100) {
-      alert(`學生 ${record.name} 的成績必須在 0-100 之間！`);
-      return;
-    }
-  }
-  gradeRecords.value = editRecords.value.map(record => ({
-    name: record.name,
-    project: record.project,
-    score: record.score,
-    comment: record.comment
-  }));
-  closeEditModal();
-};
-
-const closeEditModal = () => {
-  showEditModal.value = false;
-  editRecords.value = [];
-};
-
-// 導出 CSV 相關
-const showExportModal = ref(false);
-
-const exportToCSV = () => {
-  showExportModal.value = true;
-};
-
-const confirmExport = () => {
+// 匯出 CSV
+function exportCSV() {
   const headers = ['姓名', '實習項目', '成績', '評語', '實習時數'];
-  const rows = gradeRecords.value.map(record => [
-    `"${record.name}"`,
-    `"${record.project}"`,
-    record.score,
-    `"${record.comment || '-'}"`,
-    getStudentHours(record.name)
+  const rows = filteredRecords.value.map(r => [
+    r.name, r.project, r.score, r.comment || '', getHours(r.name)
   ]);
-
-  const csvContent = [
-    headers.join(','),
-    ...rows.map(row => row.join(','))
-  ].join('\n');
-
-  // 使用 UTF-8 with BOM 避免中文亂碼
-  const BOM = '\uFEFF';
-  const blob = new Blob([BOM + csvContent], { type: 'text/csv;charset=utf-8;' });
+  const csvContent = [headers, ...rows]
+    .map(e => e.map(v => `"${v}"`).join(','))
+    .join('\n');
+  const blob = new Blob(["\uFEFF" + csvContent], { type: 'text/csv;charset=utf-8;' });
   const link = document.createElement('a');
   link.href = URL.createObjectURL(blob);
-  link.download = 'internship_grades.csv';
+  link.download = 'student_grades.csv';
+  link.style.display = 'none';
+  document.body.appendChild(link);
   link.click();
-  URL.revokeObjectURL(link.href);
+  document.body.removeChild(link);
+}
 
-  showExportModal.value = false;
-};
+// 單一編輯
+const showSingleEditModal = ref(false);
+const editRecord = ref({ name: '', project: '', score: 0, comment: '', index: -1 });
+const singleError = ref({ score: '' });
+function openSingleEditModal(r, idx) {
+  editRecord.value = { ...r, index: idx };
+  singleError.value = { score: '' };
+  showSingleEditModal.value = true;
+}
+function validateSingleScore() {
+  const s = editRecord.value.score;
+  singleError.value.score =
+    s === ''     ? '請輸入成績' :
+    isNaN(s)||s<0||s>100 ? '成績必須在 0-100 之間' : '';
+}
+function saveSingleEdit() {
+  validateSingleScore();
+  if (singleError.value.score) return;
+  if (!confirm('確定要儲存？')) return;
+  const i = editRecord.value.index;
+  gradeRecords.value[i] = { ...gradeRecords.value[i], score: Number(editRecord.value.score), comment: editRecord.value.comment.trim() };
+  showSingleEditModal.value = false;
+}
+function closeSingleEditModal() { showSingleEditModal.value = false; }
+
+// 批量編輯
+const showBatchEditModal = ref(false);
+const batchEditRecords = ref([]);
+const batchErrors = ref([]);
+function openBatchEditModal() { batchEditRecords.value = gradeRecords.value.map(r => ({ ...r })); batchErrors.value = []; showBatchEditModal.value = true; }
+function validateBatchScore(i) { const s = batchEditRecords.value[i].score; batchErrors.value[i] = s === '' ? { score: '請輸入成績' } : isNaN(s)||s<0||s>100 ? { score: '成績必須在 0-100 之間' } : null; }
+function saveBatchEdit() { batchEditRecords.value.forEach((_, i) => validateBatchScore(i)); if (batchErrors.value.some(e => e)) return; if (!confirm('確定要儲存所有？')) return; gradeRecords.value = batchEditRecords.value.map(r => ({ ...r, score: Number(r.score), comment: r.comment.trim() })); showBatchEditModal.value = false; }
+function closeBatchEditModal() { showBatchEditModal.value = false; }
 </script>
 
 <style scoped>
-.home-card {
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-.home-card:hover {
-  transform: scale(1.02);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
-}
+.home-card { transition: transform 0.3s, box-shadow 0.3s; }
+.home-card:hover { transform: scale(1.02); box-shadow: 0 10px 20px rgba(0,0,0,0.15); }
+table { min-width: 100% }
+th, td { white-space: nowrap }
+@media (max-width: 640px) { th, td { font-size: 0.75rem; padding: 0.5rem } }
 </style>
