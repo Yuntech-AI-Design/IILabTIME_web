@@ -1,12 +1,12 @@
 <template>
-  <div class="space-y-6 p-6 max-w-3xl mx-auto">
+  <div class="space-y-6">
     <!-- 競賽基本資訊卡片 -->
     <div class="card">
       <h2 class="card-title">競賽基本資訊</h2>
       <div class="space-y-4">
         <!-- 競賽類別 -->
         <div>
-          <label class="form-label">競賽類別 <span class="text-red">*</span></label>
+          <label class="form-label">競賽類別 <span class="text-Ghibli-light-red">*</span></label>
           <select
             :value="modelValue.competitionType"
             @change="updateField('competitionType', $event.target.value)"
@@ -30,7 +30,7 @@
 
         <!-- 參與競賽名稱 -->
         <div>
-          <label class="form-label">參與競賽名稱 <span class="text-red">*</span></label>
+          <label class="form-label">參與競賽名稱 <span class="text-Ghibli-light-red">*</span></label>
           <input
             type="text"
             :value="modelValue.competitionName"
@@ -43,7 +43,7 @@
 
         <!-- 競賽性質 -->
         <div>
-          <label class="form-label">競賽性質 <span class="text-red">*</span></label>
+          <label class="form-label">競賽性質 <span class="text-Ghibli-light-red">*</span></label>
           <select
             :value="modelValue.competitionNature"
             @change="updateField('competitionNature', $event.target.value)"
@@ -74,7 +74,7 @@
 
         <!-- 競賽參與程度 -->
         <div>
-          <label class="form-label">競賽參與程度 <span class="text-red">*</span></label>
+          <label class="form-label">競賽參與程度 <span class="text-Ghibli-light-red">*</span></label>
           <select
             :value="modelValue.participationLevel"
             @change="updateField('participationLevel', $event.target.value)"
@@ -89,7 +89,7 @@
 
         <!-- 作品名稱或競賽項目 -->
         <div>
-          <label class="form-label">作品名稱或競賽項目 <span class="text-red">*</span></label>
+          <label class="form-label">作品名稱或競賽項目 <span class="text-Ghibli-light-red">*</span></label>
           <input
             type="text"
             :value="modelValue.projectName"
@@ -102,7 +102,7 @@
 
         <!-- 作品內容摘要 -->
         <div>
-          <label class="form-label">作品內容摘要 <span class="text-red">*</span></label>
+          <label class="form-label">作品內容摘要 <span class="text-Ghibli-light-red">*</span></label>
           <textarea
             :value="modelValue.summary"
             @input="updateField('summary', $event.target.value)"
@@ -121,7 +121,7 @@
       <div class="space-y-4">
         <!-- 參賽組數或件數 -->
         <div>
-          <label class="form-label">參賽組數或件數 <span class="text-red">*</span></label>
+          <label class="form-label">參賽組數或件數 <span class="text-Ghibli-light-red">*</span></label>
           <input
             type="text"
             :value="modelValue.totalEntries"
@@ -134,7 +134,7 @@
 
         <!-- 活動主辦單位 -->
         <div>
-          <label class="form-label">活動主辦單位 <span class="text-red">*</span></label>
+          <label class="form-label">活動主辦單位 <span class="text-Ghibli-light-red">*</span></label>
           <input
             type="text"
             :value="modelValue.hostOrganization"
@@ -147,7 +147,7 @@
 
         <!-- 活動起迄日期 -->
         <div>
-          <label class="form-label">活動起迄日期 <span class="text-red">*</span></label>
+          <label class="form-label">活動起迄日期 <span class="text-Ghibli-light-red">*</span></label>
           <div class="flex items-center space-x-2">
             <input
               type="date"
@@ -156,7 +156,7 @@
               class="form-input flex-1"
               required
             />
-            <span class="text-primary">~</span>
+            <span class="text-Ghibli-brown">~</span>
             <input
               type="date"
               :value="modelValue.endDate"
@@ -192,11 +192,10 @@ const updateField = (field, value) => {
 
 <style scoped>
 .card {
-  background-color: #E4B584; /* Ghibli-skin */
+  background-color: #ffffff;
   padding: 1.5rem;
+  border: 1px solid #6C96A3; /* Ghibli-blue */
   border-radius: 0.5rem;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  border: 1px solid rgba(108, 150, 163, 0.2); /* Ghibli-blue/20 */
 }
 
 .card-title {
@@ -219,7 +218,7 @@ const updateField = (field, value) => {
 .form-input {
   width: 100%;
   padding: 0.5rem 0.75rem;
-  border: 1px solid rgba(108, 150, 163, 0.5); /* Ghibli-blue/50 */
+  border: 1px solid #6C96A3; /* Ghibli-blue */
   border-radius: 0.375rem;
   background-color: #ffffff;
   outline: none;

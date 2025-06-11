@@ -1,45 +1,71 @@
 <template>
-  <section class="w-full px-4 py-6 min-h-screen bg-gradient-to-b from-gray-50 to-gray-200">
-    <!-- 居中容器 -->
-    <div class="max-w-5xl mx-auto">
+  <section class="w-full px-[10%] py-6 relative z-10">
+    <div
+      class="home-card bg-white border-4 border-stone-950 rounded-xl p-8 shadow-xl opacity-0"
+      :class="{ 'animate-fade-in-up-relative': headerVisible }"
+      style="animation-delay: 0.8s"
+    >
       <!-- 標題 -->
-      <h1 class="text-3xl font-bold text-gray-800 mb-8 text-center animate-fade-in">
-        個人資料頁面
+      <h1 class="text-2xl font-semibold text-stone-950 mb-6 flex items-center justify-center">
+        <UserIcon class="w-7 h-7 mr-2 text-Ghibli-blue" /> 個人資料頁面
       </h1>
 
       <!-- 兩欄佈局 -->
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <!-- 左欄：個人資料卡片 -->
-        <div class="animate-slide-in-left">
+        <div>
           <ProfileCard
             :profile="profile"
             :default-avatar="defaultAvatar"
             @update:profile="updateProfile"
             @show-success="showSuccessMessage"
+            class="border border-stone-300 rounded-lg p-4"
           />
         </div>
 
         <!-- 右欄：實習單位資料卡片 -->
-        <div class="animate-slide-in-right">
+        <div>
           <InternshipCard
             :internship="internship"
             @update:internship="updateInternship"
             @show-success="showSuccessMessage"
+            class="border border-stone-300 rounded-lg p-4"
           />
         </div>
       </div>
-    </div>
 
-    <!-- 成功提示 -->
-    <SuccessToast :show="showSuccess" message="資料已成功更新！" />
+      <!-- 成功提示模態框 -->
+      <teleport to="body">
+        <ModalDialog
+          v-if="showSuccess"
+          :visible="showSuccess"
+          message="資料已成功更新！"
+          @confirm="showSuccess = false"
+          @cancel="showSuccess = false"
+          @close="showSuccess = false"
+        >
+          <div class="flex justify-end">
+            <button
+              @click="showSuccess = false"
+              class="px-6 py-2 bg-Ghibli-blue text-white rounded-full font-semibold hover:bg-Ghibli-yellow"
+            >
+              確定
+            </button>
+          </div>
+        </ModalDialog>
+      </teleport>
+    </div>
   </section>
 </template>
 
 <script setup>
 import { ref, reactive } from 'vue';
+import { UserIcon } from '@heroicons/vue/24/outline';
 import ProfileCard from '@/components/Profile/ProfileCard.vue';
 import InternshipCard from '@/components/Profile/InternshipCard.vue';
-import SuccessToast from '@/components/Profile/SuccessToast.vue';
+import ModalDialog from '@/components/Grades/ModalDialog.vue';
+
+defineProps({ headerVisible: { type: Boolean, default: true } });
 
 // 模擬個人資料
 const defaultAvatar = 'https://via.placeholder.com/150?text=頭像';
@@ -76,38 +102,15 @@ const updateInternship = (newInternship) => {
 
 const showSuccessMessage = () => {
   showSuccess.value = true;
-  setTimeout(() => {
-    showSuccess.value = false;
-  }, 3000);
 };
 </script>
 
 <style scoped>
-/* 定義動畫 */
-@keyframes fade-in {
-  from { opacity: 0; }
-  to { opacity: 1; }
+.home-card {
+  transition: transform 0.3s, box-shadow 0.3s;
 }
-
-@keyframes slide-in-left {
-  from { opacity: 0; transform: translateX(-20px); }
-  to { opacity: 1; transform: translateX(0); }
-}
-
-@keyframes slide-in-right {
-  from { opacity: 0; transform: translateX(20px); }
-  to { opacity: 1; transform: translateX(0); }
-}
-
-.animate-fade-in {
-  animation: fade-in 0.5s ease-in-out;
-}
-
-.animate-slide-in-left {
-  animation: slide-in-left 0.5s ease-in-out;
-}
-
-.animate-slide-in-right {
-  animation: slide-in-right 0.5s ease-in-out;
+.home-card:hover {
+  transform: scale(1.02);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
 }
 </style>

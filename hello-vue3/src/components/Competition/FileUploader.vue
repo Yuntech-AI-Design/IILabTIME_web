@@ -27,14 +27,14 @@
         <div
           v-for="(file, index) in modelValue"
           :key="index"
-          class="flex items-center justify-between bg-white p-2 rounded-lg border border-Ghibli-blue/20"
+          class="flex items-center justify-between bg-white p-2 rounded-lg border border-stone-300"
         >
           <span class="text-Ghibli-brown">
             {{ file.name }} ({{ (file.size / 1024 / 1024).toFixed(2) }} MB)
           </span>
           <button
             @click="removeFile(index)"
-            class="px-3 py-1 bg-Ghibli-light-red text-white rounded-lg hover:bg-Ghibli-red transition-colors"
+            class="px-3 py-1 bg-Ghibli-red text-white rounded-full text-sm font-semibold hover:bg-Ghibli-yellow"
           >
             移除
           </button>
@@ -76,18 +76,55 @@ const removeFile = (index) => {
 
 <style scoped>
 .card {
-  @apply bg-Ghibli-skin p-6 rounded-lg shadow-md border border-Ghibli-blue/20;
+  background-color: #ffffff;
+  padding: 1.5rem;
+  border: 1px solid #6C96A3; /* Ghibli-blue */
+  border-radius: 0.5rem;
 }
 
 .card-title {
-  @apply text-lg font-semibold text-Ghibli-brown mb-4 border-b border-Ghibli-blue/30 pb-2;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #64544C; /* Ghibli-brown */
+  margin-bottom: 1rem;
+  border-bottom: 1px solid rgba(108, 150, 163, 0.3); /* Ghibli-blue/30 */
+  padding-bottom: 0.5rem;
 }
 
 .form-label {
-  @apply block text-sm font-medium text-Ghibli-brown mb-1;
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #64544C; /* Ghibli-brown */
+  margin-bottom: 0.25rem;
 }
 
 .form-input-file {
-  @apply w-full px-3 py-2 border border-Ghibli-blue/50 rounded-lg bg-white text-Ghibli-brown file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-Ghibli-blue file:text-white file:cursor-pointer hover:file:bg-Ghibli-blue/80 focus:outline-none focus:ring-2 focus:ring-Ghibli-yellow;
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #6C96A3; /* Ghibli-blue */
+  border-radius: 0.375rem;
+  background-color: #ffffff;
+  color: #64544C; /* Ghibli-brown */
+}
+
+.form-input-file:focus {
+  box-shadow: 0 0 0 2px #EDB422; /* Ghibli-yellow */
+}
+
+.text-Ghibli-green {
+  color: #86A579; /* Ghibli-green */
+}
+
+.text-Ghibli-brown {
+  color: #64544C; /* Ghibli-brown */
+}
+
+.bg-Ghibli-red {
+  background-color: #B73239; /* Ghibli-red */
+}
+
+.bg-Ghibli-yellow:hover {
+  background-color: #EDB422; /* Ghibli-yellow */
 }
 </style>

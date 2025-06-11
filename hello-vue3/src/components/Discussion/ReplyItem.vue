@@ -1,6 +1,6 @@
 <template>
-  <div class="bg-gray-50 border-l-4 border-blue-500 rounded-lg p-4">
-    <p class="text-gray-800">{{ reply.content }}</p>
+  <div class="bg-Ghibli-skin/10 border-l-4 border-Ghibli-blue rounded-lg p-4">
+    <p class="text-Ghibli-brown">{{ reply.content }}</p>
     <div class="mt-2 text-sm text-gray-500">
       回覆者：{{ reply.author.name }} | 回覆時間：{{ formatDate(reply.createdAt) }}
     </div>
@@ -8,35 +8,31 @@
       <!-- 按讚 -->
       <button
         @click="likeReply"
-        class="flex items-center space-x-1 text-gray-600 hover:text-blue-500 transition-all duration-200"
+        class="flex items-center space-x-1 text-gray-600 hover:text-Ghibli-blue transition-all duration-200"
       >
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
-        </svg>
+        <ThumbUpIcon class="w-5 h-5" />
         <span>{{ reply.likes }}</span>
       </button>
       <!-- 獎勵/收回獎勵 -->
       <button
         v-if="postAuthorId === currentUser.id && !reply.rewarded"
         @click="rewardReply"
-        class="px-3 py-1 bg-green-500 text-white rounded-full text-sm hover:bg-green-600 transition-all duration-200"
+        class="px-3 py-1 bg-Ghibli-green text-white rounded-full text-sm font-semibold hover:bg-Ghibli-yellow transition-all duration-200"
       >
         獎勵
       </button>
       <button
         v-if="postAuthorId === currentUser.id && reply.rewarded"
         @click="revokeReward"
-        class="px-3 py-1 bg-red-500 text-white rounded-full text-sm hover:bg-red-600 transition-all duration-200"
+        class="px-3 py-1 bg-Ghibli-red text-white rounded-full text-sm font-semibold hover:bg-Ghibli-yellow transition-all duration-200"
       >
         收回獎勵
       </button>
       <span
         v-if="reply.rewarded"
-        class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm flex items-center space-x-1"
+        class="px-3 py-1 bg-Ghibli-green/10 text-Ghibli-green rounded-full text-sm flex items-center space-x-1"
       >
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-        </svg>
+        <CheckIcon class="w-4 h-4" />
         <span>已獎勵 +{{ reply.rewardPoints }} 分</span>
       </span>
     </div>
@@ -44,6 +40,8 @@
 </template>
 
 <script setup>
+import { ThumbUpIcon, CheckIcon } from '@heroicons/vue/24/outline';
+
 const props = defineProps({
   reply: {
     type: Object,
