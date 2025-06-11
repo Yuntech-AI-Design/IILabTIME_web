@@ -18,7 +18,7 @@
       :is-upload-week="isUploadWeek"
       :last-upload-week="lastUploadWeek"
       :last-upload-week-timestamp="lastUploadWeekTimestamp"
-      @check-out="checkOut"
+      @open-report-modal="openReportModal"
     />
     <StatsGrid
       :weekly-hours="weeklyHours"
@@ -35,11 +35,32 @@
       @cancel="cancelModal"
       @close="showModal = false"
     />
+    <!-- 週誌上傳模態框 -->
+    <teleport to="body">
+      <div
+        v-if="showReportModal"
+        class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
+      >
+        <div class="bg-white rounded-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto p-6 relative">
+          <button
+            @click="showReportModal = false"
+            class="absolute top-4 right-4 text-stone-950 hover:text-Ghibli-red"
+          >
+            <XMarkIcon class="w-6 h-6" />
+          </button>
+          <div v-if="!isReportsLoaded" class="text-red-500 text-center py-4">
+            無法載入週誌表單，請檢查 Reports.vue 是否正確導入或有錯誤
+          </div>
+          <Reports :header-visible="false" @loaded="isReportsLoaded = true" @submit-success="handleReportSubmit" />
+        </div>
+      </div>
+    </teleport>
   </div>
 </template>
 
 <script setup>
 import { ref } from 'vue'
+import { XMarkIcon } from '@heroicons/vue/24/outline'
 import BallBackground from '@/components/Background/BallBackground.vue'
 import HeaderSection from '@/components/CheckIn/HeaderSection.vue'
 import StatusCard from '@/components/CheckIn/StatusCard.vue'
@@ -47,6 +68,7 @@ import StatsGrid from '@/components/CheckIn/StatsGrid.vue'
 import HistoryTable from '@/components/CheckIn/HistoryTable.vue'
 import ModalDialog from '@/components/CheckIn/ModalDialog.vue'
 import UploadWeek from '@/components/CheckIn/UploadWeek.vue'
+import Reports from '@/components/CheckIn/Reports.vue'
 
 // 動畫與狀態
 const headerVisible = ref(true)
@@ -60,10 +82,11 @@ const checkInRecords = ref([])
 const showModal = ref(false)
 const modalMessage = ref('')
 const pendingAction = ref(null)
-const isUploadWeek =  ref(false)
+const isUploadWeek = ref(false)
 const lastUploadWeek = ref('')
 const lastUploadWeekTimestamp = ref(null)
-
+const showReportModal = ref(false)
+const isReportsLoaded = ref(false)
 
 const getCurrentTime = () => new Date().toLocaleTimeString('zh-TW', { hour: '2-digit', minute: '2-digit', hour12: false })
 const getCurrentDate = () => {
@@ -79,10 +102,8 @@ const checkIn = () => {
 
 const checkOut = () => {
   if (!lastCheckInTimestamp.value) return
-
   const now = Date.now()
   const diffInSeconds = Math.floor((now - lastCheckInTimestamp.value) / 1000)
-
   if (diffInSeconds < 60) {
     const remaining = 60 - diffInSeconds
     modalMessage.value = `實習上線打卡後需等待 1 分鐘才能下線打卡！\n（還需等待 ${remaining} 秒）`
@@ -94,7 +115,6 @@ const checkOut = () => {
     showModal.value = true
   }
 }
-
 
 const confirmAction = () => {
   if (pendingAction.value === 'checkIn') {
@@ -131,5 +151,17 @@ const confirmAction = () => {
 const cancelModal = () => {
   showModal.value = false
   pendingAction.value = null
+}
+
+const openReportModal = () => {
+  isReportsLoaded.value = false
+  showReportModal.value = true
+}
+
+const handleReportSubmit = () => {
+  isUploadWeek.value = true
+  lastUploadWeek.value = getCurrentDate()
+  lastUploadWeekTimestamp.value = Date.now()
+  showReportModal.value = false
 }
 </script>

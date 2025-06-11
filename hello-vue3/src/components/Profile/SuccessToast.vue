@@ -5,7 +5,7 @@
   >
     <div
       v-if="show"
-      class="fixed top-4 right-4 bg-green-500 text-white border border-green-600 p-3 rounded-lg shadow-lg text-sm"
+      class="fixed top-4 right-4 bg-Ghibli-green text-white border border-Ghibli-green/50 p-3 rounded-lg text-sm"
     >
       {{ message }}
     </div>
@@ -13,7 +13,6 @@
 </template>
 
 <script setup>
-// 直接使用 defineProps 聲明，避免未使用變數錯誤
 defineProps({
   show: {
     type: Boolean,

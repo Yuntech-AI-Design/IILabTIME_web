@@ -1,56 +1,64 @@
 <template>
-  <section class="w-full px-4 py-6 min-h-screen bg-gradient-to-b from-gray-50 to-gray-200">
-    <div class="max-w-5xl mx-auto">
-      <h1 class="text-3xl font-bold text-gray-800 mb-8 text-center animate-fade-in">
-        實習成果報告
+  <section class="w-full px-[10%] py-6 relative z-10">
+    <div
+      class="home-card bg-white border-4 border-stone-950 rounded-xl p-8 shadow-xl opacity-0"
+      :class="{ 'animate-fade-in-up-relative': headerVisible }"
+      style="animation-delay: 0.8s"
+    >
+      <!-- 標題 -->
+      <h1 class="text-2xl font-semibold text-stone-950 mb-6 flex items-center justify-center">
+        <DocumentReportIcon class="w-7 h-7 mr-2 text-Ghibli-blue" /> 實習成果報告
       </h1>
 
-      <div class="mb-8 animate-slide-in-left">
-        <PlanUpload
-          :plan-file="reportData.planFile"
-          @update:planFile="reportData.planFile = $event"
-          :error-message="errors.planFile"
-        />
-      </div>
+      <!-- 報告區塊 -->
+      <div class="space-y-6">
+        <div class="border border-stone-300 rounded-lg p-4">
+          <PlanUpload
+            :plan-file="reportData.planFile"
+            @update:planFile="reportData.planFile = $event"
+            :error-message="errors.planFile"
+          />
+        </div>
 
-      <div class="mb-8 animate-slide-in-right">
-        <AchievementsForm
-          v-model:achievements="reportData.achievements"
-          :error-message="errors.achievements"
-        />
-      </div>
+        <div class="border border-stone-300 rounded-lg p-4">
+          <AchievementsForm
+            v-model:achievements="reportData.achievements"
+            :error-message="errors.achievements"
+          />
+        </div>
 
-      <div class="mb-8 animate-slide-in-left">
-        <SuggestionsForm
-          v-model:selfReflection="reportData.selfReflection"
-          v-model:institutionSuggestions="reportData.institutionSuggestions"
-          :error-message-self="errors.selfReflection"
-          :error-message-institution="errors.institutionSuggestions"
-        />
-      </div>
+        <div class="border border-stone-300 rounded-lg p-4">
+          <SuggestionsForm
+            v-model:selfReflection="reportData.selfReflection"
+            v-model:institutionSuggestions="reportData.institutionSuggestions"
+            :error-message-self="errors.selfReflection"
+            :error-message-institution="errors.institutionSuggestions"
+          />
+        </div>
 
-      <div class="mb-8 animate-slide-in-right">
-        <FutureGoalsForm
-          v-model:futureGoals="reportData.futureGoals"
-          :error-message="errors.futureGoals"
-        />
-      </div>
+        <div class="border border-stone-300 rounded-lg p-4">
+          <FutureGoalsForm
+            v-model:futureGoals="reportData.futureGoals"
+            :error-message="errors.futureGoals"
+          />
+        </div>
 
-      <div class="mb-8 animate-slide-in-left">
-        <AppendixSection
-          :weekly-reports="reportData.weeklyReports"
-          @update:weeklyReports="reportData.weeklyReports = $event"
-          :error-messages="{ weeklyReports: errors.weeklyReports }"
-        />
-      </div>
+        <div class="border border-stone-300 rounded-lg p-4">
+          <AppendixSection
+            :weekly-reports="reportData.weeklyReports"
+            @update:weeklyReports="reportData.weeklyReports = $event"
+            :error-messages="{ weeklyReports: errors.weeklyReports }"
+          />
+        </div>
 
-      <div class="flex justify-center space-x-4">
-        <button
-          @click="exportToPDF"
-          class="px-6 py-2 bg-blue-500 text-white rounded-full font-semibold hover:bg-blue-600 transition-all duration-200"
-        >
-          匯出 PDF
-        </button>
+        <div class="flex justify-center">
+          <button
+            @click="exportToPDF"
+            class="px-6 py-2 bg-Ghibli-blue text-white rounded-full font-semibold hover:bg-Ghibli-yellow flex items-center"
+          >
+            <ArrowDownTrayIcon class="w-5 h-5 mr-2" /> 匯出 PDF
+          </button>
+        </div>
       </div>
     </div>
   </section>
@@ -61,11 +69,14 @@
 import { jsPDF } from 'jspdf';
 import 'jspdf-autotable';
 import { reactive } from 'vue';
+import { DocumentReportIcon, ArrowDownTrayIcon } from '@heroicons/vue/24/outline';
 import PlanUpload from '@/components/InternshipReport/PlanUpload.vue';
 import AchievementsForm from '@/components/InternshipReport/AchievementsForm.vue';
 import SuggestionsForm from '@/components/InternshipReport/SuggestionsForm.vue';
 import FutureGoalsForm from '@/components/InternshipReport/FutureGoalsForm.vue';
 import AppendixSection from '@/components/InternshipReport/AppendixSection.vue';
+
+defineProps({ headerVisible: { type: Boolean, default: true } });
 
 const reportData = reactive({
   planFile: null,
@@ -95,11 +106,11 @@ const errors = reactive({
 </script>
 
 <style scoped>
-@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
-@keyframes slide-in-left { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }
-@keyframes slide-in-right { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
-
-.animate-fade-in { animation: fade-in 0.5s ease-in-out; }
-.animate-slide-in-left { animation: slide-in-left 0.5s ease-in-out; }
-.animate-slide-in-right { animation: slide-in-right 0.5s ease-in-out; }
+.home-card {
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+.home-card:hover {
+  transform: scale(1.02);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+}
 </style>
