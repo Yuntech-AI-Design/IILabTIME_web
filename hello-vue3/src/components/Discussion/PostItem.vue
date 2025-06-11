@@ -5,7 +5,7 @@
       <h3 class="text-xl font-bold text-Ghibli-brown">{{ post.title }}</h3>
       <p class="text-Ghibli-blue mt-2">{{ post.content }}</p>
       <div class="mt-2 text-sm text-gray-600">
-        發問者：{{ post.author }} | 時間：{{ formatDate(post.createdAt) }}
+        發問者：{{ post.author.name }} | 時間：{{ formatDate(post.createdAt) }}
       </div>
     </div>
 
@@ -45,11 +45,28 @@ import ReplyItem from '@/components/Discussion/ReplyItem.vue';
 const props = defineProps({
   post: {
     type: Object,
-    required: true
+    required: true,
+    validator: (post) => {
+      return (
+        'id' in post &&
+        'title' in post &&
+        'content' in post &&
+        'createdAt' in post &&
+        'replies' in post &&
+        Array.isArray(post.replies) &&
+        'author' in post &&
+        typeof post.author === 'object' &&
+        'id' in post.author &&
+        'name' in post.author
+      );
+    }
   },
   currentUser: {
     type: Object,
-    required: true
+    required: true,
+    validator: (user) => {
+      return 'id' in user && 'name' in user;
+    }
   }
 });
 
