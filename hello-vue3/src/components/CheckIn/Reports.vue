@@ -1,7 +1,7 @@
 <template>
   <section class="w-full px-[10%] py-6 relative z-10">
     <div
-      class="home-card bg-white border-4 border-stone-950 rounded-xl p-8 shadow-xl opacity-0"
+      class="home-card bg-white border-4 border-stone-950 rounded-xl p-8 shadow-xl"
       :class="{ 'animate-fade-in-up-relative': headerVisible }"
       style="animation-delay: 0.8s"
     >
@@ -48,41 +48,31 @@
       <teleport to="body">
         <ModalDialog
           v-if="showErrorModal"
-          :visible="showErrorModal"
           :message="errorMessage"
-          @confirm="showErrorModal = false"
-          @cancel="showErrorModal = false"
           @close="showErrorModal = false"
-        >
-          <div class="flex justify-end">
-            <button
-              @click="showErrorModal = false"
-              class="px-6 py-2 bg-Ghibli-blue text-white rounded-full font-semibold hover:bg-Ghibli-yellow"
-            >
-              確定
-            </button>
-          </div>
-        </ModalDialog>
+        />
       </teleport>
     </div>
   </section>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
-import { DocumentTextIcon, ArrowUpTrayIcon } from '@heroicons/vue/24/outline';
-import ReportFields from '@/components/WeeklyReport/ReportForm.vue';
-import PhotoUploader from '@/components/WeeklyReport/PhotoUploader.vue';
-import ModalDialog from '@/components/Grades/ModalDialog.vue';
+import { ref, onMounted } from 'vue'
+import { DocumentTextIcon, ArrowUpTrayIcon } from '@heroicons/vue/24/outline'
+import ReportFields from '@/components/WeeklyReport/ReportForm.vue'
+import PhotoUploader from '@/components/WeeklyReport/PhotoUploader.vue'
+import ModalDialog from '@/components/CheckIn/ModalDialog.vue'
 
-defineProps({ headerVisible: { type: Boolean, default: true } });
+defineProps({
+  headerVisible: { type: Boolean, default: true }
+})
 
-// 模擬個人資料（導入公司）
+const emit = defineEmits(['loaded', 'submit-success'])
+
 const userProfile = {
   internshipCompany: 'Tech Innovate Inc.'
-};
+}
 
-// 表單數據
 const formData = ref({
   content: '',
   observations: '',
@@ -90,20 +80,18 @@ const formData = ref({
   challenges: '',
   solutions: '',
   others: ''
-});
+})
 
-const photos = ref([]);
+const photos = ref([])
 
-// 錯誤提示狀態
-const showErrorModal = ref(false);
-const errorMessage = ref('');
+const showErrorModal = ref(false)
+const errorMessage = ref('')
 
-// 確認頁面掛載
 onMounted(() => {
-  console.log('Reports.vue 已掛載，實習廠商：', userProfile.internshipCompany);
-});
+  console.log('Reports.vue 已掛載，實習廠商：', userProfile.internshipCompany)
+  emit('loaded')
+})
 
-// 提交週誌
 const handleSubmit = () => {
   if (
     formData.value.content === '' ||
@@ -112,20 +100,18 @@ const handleSubmit = () => {
     formData.value.challenges === '' ||
     formData.value.solutions === ''
   ) {
-    showError('請填寫所有必填欄位！');
-    return;
+    showError('請填寫所有必填欄位！')
+    return
   }
   if (photos.value.length !== 4) {
-    showError('請上傳正好 4 張照片！');
-    return;
+    showError('請上傳正好 4 張照片！')
+    return
   }
-  // 模擬提交
   console.log('提交數據：', {
     company: userProfile.internshipCompany,
     ...formData.value,
     photos: photos.value.map(p => p.file)
-  });
-  // 清空表單
+  })
   formData.value = {
     content: '',
     observations: '',
@@ -133,18 +119,17 @@ const handleSubmit = () => {
     challenges: '',
     solutions: '',
     others: ''
-  };
-  photos.value = [];
-  // 顯示成功提示
-  errorMessage.value = '週誌提交成功！';
-  showErrorModal.value = true;
-};
+  }
+  photos.value = []
+  errorMessage.value = '週誌提交成功！'
+  showErrorModal.value = true
+  emit('submit-success')
+}
 
-// 顯示錯誤
 const showError = (message) => {
-  errorMessage.value = message;
-  showErrorModal.value = true;
-};
+  errorMessage.value = message
+  showErrorModal.value = true
+}
 </script>
 
 <style scoped>

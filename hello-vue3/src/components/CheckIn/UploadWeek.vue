@@ -20,7 +20,7 @@
       </div>
       <div class="flex space-x-4">
         <button
-          @click="$emit('check-in')"
+          @click="$emit('open-report-modal')"
           :disabled="isUploadWeek"
           class="px-8 py-4 bg-Ghibli-green text-white rounded-2xl font-semibold shadow-lg hover:bg-Ghibli-yellow hover:text-stone-950 disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed transition-all duration-300 flex items-center text-xl"
         >
@@ -44,7 +44,7 @@ defineProps({
   }
 })
 
-// defineEmits(['check-in', 'check-out'])
+defineEmits(['open-report-modal'])
 </script>
 
 <style scoped>

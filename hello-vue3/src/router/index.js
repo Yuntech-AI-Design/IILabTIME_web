@@ -11,7 +11,7 @@ const Dashboard = () => import('../views/Dashboard.vue')
 const GradeManagement = () => import('../views/GradeManagement.vue')
 const CheckIn = () => import('../views/CheckIn.vue')
 const Competition = () => import('../views/Competition.vue')
-const Reports = () => import('../views/Reports.vue')
+const Reports = () => import('../components/CheckIn/Reports.vue')
 const DiscussionForm = () => import('../views/DiscussionForm.vue')
 const Profile = () => import('../views/Profile.vue')
 const IntershipForm = () => import('../views/IntershipForm.vue')
@@ -38,31 +38,31 @@ const routes = [
     path: '/dashboard',
     name: 'Dashboard',
     component: Dashboard,
-    meta: { requiresAuth: false }
+    meta: { requiresAuth: true }
   },
   {
     path: '/grades',
     name: 'GradeManagement',
     component: GradeManagement,
-    meta: { requiresAuth: false }
+    meta: { requiresAuth: true }
   },
   {
     path: '/check-in',
     name: 'CheckIn',
     component: CheckIn,
-    meta: { requiresAuth: false }
+    meta: { requiresAuth: true }
   },
   {
     path: '/competition',
     name: 'Competition',
     component: Competition,
-    meta: { requiresAuth: false }
+    meta: { requiresAuth: true }
   },
   {
     path: '/reports',
     name: 'Reports',
     component: Reports,
-    meta: { requiresAuth: false }
+    meta: { requiresAuth: true }
   },
   {
     path: '/discussion',
@@ -74,7 +74,7 @@ const routes = [
     path: '/profile',
     name: 'Profile',
     component: Profile,
-    meta: { requiresAuth: false }
+    meta: { requiresAuth: true }
   },
   {
     path: '/:pathMatch(.*)*',
@@ -84,13 +84,13 @@ const routes = [
     path: '/intershipform',
     name: 'intershipform',
     component: IntershipForm,
-    meta: { requiresAuth: false }
+    meta: { requiresAuth: true }
   },
   {
     path: '/intershipreport',
     name: 'intershipreport',
     component: IntershipReport,
-    meta: { requiresAuth: false }
+    meta: { requiresAuth: true }
   }
 ]
 
